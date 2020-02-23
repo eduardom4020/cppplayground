@@ -1,8 +1,23 @@
 version: '2.1'
 
 services:
-  c++docker:
-    image: c++docker
+  dev:
+    image: geo-mod
     build: .
-    ports:
-      - 5000:5000
+    volumes:
+      - ./src:/usr/src/program
+    command: bash -c "
+        g++ -o main main.cpp;
+        ./main;
+        rm main;
+      "
+  build:
+    image: geo-mod
+    build: .
+    volumes:
+      - ./src:/usr/src/program
+    command: bash -c "
+        mkdir -p ./build;
+        g++ -o main main.cpp;
+        mv main ./build/main;
+      "
