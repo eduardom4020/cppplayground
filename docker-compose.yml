@@ -1,13 +1,23 @@
 version: '2.1'
 
 services:
+  enter: 
+    image: geo-mod
+    build: .
+    volumes:
+      - ./src:/usr/src
+    command: tail -f /dev/null
+    user: root
+    privileged: true
   dev:
     image: geo-mod
     build: .
     volumes:
-      - ./src:/usr/src/program
+      - ./src:/usr/src
+    user: root
+    privileged: true
     command: bash -c "
-        g++ -o main main.cpp;
+        g++ -o main main.cpp -I /usr/local/lib;
         ./main;
         rm main;
       "
@@ -16,8 +26,10 @@ services:
     build: .
     volumes:
       - ./src:/usr/src/program
+      - ./build:/usr/src/build
+    user: root
+    privileged: true
     command: bash -c "
-        mkdir -p ./build;
         g++ -o main main.cpp;
         mv main ./build/main;
       "
