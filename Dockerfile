@@ -33,7 +33,7 @@ WORKDIR /usr/src
 
 RUN rm -R ./setup
 
-RUN apt install -y libgtk-3-dev
+RUN apt install -y gnome-core gnome gnome-shell gnome-tweak-tool gdm3
 
 # Copy the current folder which contains C++ source code to the Docker image under /usr/src
  
