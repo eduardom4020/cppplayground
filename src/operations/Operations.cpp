@@ -61,3 +61,65 @@ double op::len(const Vector& v)
 
     return sqrt(sqred_len);
 }
+
+Vector op::cross(const Vector& v1, const Vector& v2)
+{
+    double x = v1.y * v2.z - v1.z * v2.y;
+    double y = v1.z * v2.x - v1.x * v2.z;
+    double z = v1.x * v2.y - v1.y * v2.x;
+
+    return Vector(x, y, z);
+}
+
+double op::crossR2(const Vector& v1, const Vector& v2)
+{
+    return v1.x * v2.y - v1.y * v2.x;
+}
+
+/*
+* if T === bool, check if v1 is at left of v2.
+* else, returns whose vector is at left of the other.
+*/
+template <typename T>
+T op::left(const Vector& v1, const Vector& v2)
+{
+    double cross_res = op::crossR2(v2, v1);
+
+    if (std::is_same<T, bool>::value)
+    {
+        return cross_res >= 0;
+    }
+    else
+    {
+        return cross_res >= 0 ? v1 : v2;
+    } 
+}
+
+// double op::crossXY(const Vector& v1, const Vector& v2)
+// {
+//     return v1.x * v2.y - v1.y * v2.x;
+// }
+
+// double op::crossXZ(const Vector& v1, const Vector& v2)
+// {
+//     return v1.x * v2.z - v1.z * v2.x;
+// }
+
+// double op::crossYZ(const Vector& v1, const Vector& v2)
+// {
+//     return v1.y * v2.z - v1.z * v2.y;
+// }
+
+// const Vector& leftXY(const Vector& v1, const Vector& v2)
+// {
+// }
+
+// const Vector& leftXZ(const Vector& v1, const Vector& v2)
+// {
+
+// }
+
+// const Vector& leftYZ(const Vector& v1, const Vector& v2)
+// {
+
+// }
