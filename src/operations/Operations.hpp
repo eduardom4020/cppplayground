@@ -8,8 +8,11 @@
 
 namespace op
 {
+    // Point only operations
     Vector sub(const Point& p1, const Point& p2);
+    double dist(const Point& p1, comst Point& p2);
 
+    // Vector only operations
     Vector sum(const Vector& v1, const Vector& v2);
     Vector sub(const Vector& v1, const Vector& v2);
     Vector mult(double lambda, const Vector& v);

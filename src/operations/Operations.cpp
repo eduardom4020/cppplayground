@@ -5,6 +5,11 @@ Vector op::sub(const Point& p1, const Point& p2)
     return Vector(p2, p1);
 }
 
+double op::dist(const Point& p1, const Point& p2)
+{
+    return op::len(op::sub(p1, p2));
+}
+
 Vector op::sum(const Vector& v1, const Vector& v2)
 {
     double x = v1.x + v2.x;
