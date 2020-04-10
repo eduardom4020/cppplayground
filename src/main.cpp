@@ -5,17 +5,18 @@
 
 int main(int argc, char const *argv[])
 {
-  std::cout << "Cross products" << std::endl;
+  std::cout << "Leftness" << std::endl;
 
   Vector v1 = Vector(5, 0, 0);
-  Vector v2 = Vector(0, 0, 3);
+  Vector v2 = Vector(0, 3, 0);
 
-  Vector cross_v1_v2 = op::cross(v1, v2);
+  bool v1_left_of_v2 = op::leftOf(v1, v2);
+  Vector v_left = op::left(v1, v2);
 
-  std::cout << cross_v1_v2.toString() << std::endl;
+  std::string who_is_left = v1_left_of_v2 ? "V1 is at left of V2" : "V2 is at left of V1";
 
-  // Vector v = Vector(1, 0, 0);
-  // std::cout << v.toString() << std::endl;
+  std::cout << who_is_left << std::endl;
+  std::cout << "The vector in left is " << v_left.toString() << std::endl;
   
   getchar();
   return 0;

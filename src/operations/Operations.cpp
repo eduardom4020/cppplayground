@@ -76,23 +76,16 @@ double op::crossR2(const Vector& v1, const Vector& v2)
     return v1.x * v2.y - v1.y * v2.x;
 }
 
-/*
-* if T === bool, check if v1 is at left of v2.
-* else, returns whose vector is at left of the other.
-*/
-template <typename T>
-T op::left(const Vector& v1, const Vector& v2)
+bool op::leftOf(const Vector& v1, const Vector& v2)
 {
     double cross_res = op::crossR2(v2, v1);
+    return cross_res >= 0;
+}
 
-    if (std::is_same<T, bool>::value)
-    {
-        return cross_res >= 0;
-    }
-    else
-    {
-        return cross_res >= 0 ? v1 : v2;
-    } 
+Vector op::left(const Vector& v1, const Vector& v2)
+{
+    double cross_res = op::crossR2(v2, v1);
+    return cross_res >= 0 ? v1 : v2;
 }
 
 // double op::crossXY(const Vector& v1, const Vector& v2)

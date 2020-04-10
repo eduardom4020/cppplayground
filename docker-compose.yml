@@ -1,10 +1,19 @@
 version: '3'
 
 services:
-  # make:
-  #   image: 'gcc:4.9'
-  #   volumes:
-  #     - ./src:/home
-  #   user: root
-  #   privileged: true
-  #   command: 'make all --directory=/home'
+  geo-mod:
+    image: 'gcc:4.9'
+    volumes:
+      - ./src:/home
+      - ./build:/build
+    user: root
+    privileged: true
+    command: >
+      bash -c "
+        rm -R -f /build/*;
+        rm -R -f /build/**/*;
+        mkdir /build;
+        mkdir /build/compiled;
+        make all --directory=/home;
+        /build/geo_mod;
+      "

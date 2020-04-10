@@ -5,16 +5,14 @@
 
 Angle::Angle(const Vector& v)
 {
-    _u = Vector(1.0, 0, 0);
-    _v1 = v;
+    _v1 = &v;
     _v2 = &_u;
 }
 
 Angle::Angle(const Vector& v1, const Vector& v2)
 {
-    _u = Vector(1.0, 0, 0);
-    _v1 = v1;
-    _v2 = v2;
+    _v1 = &v1;
+    _v2 = &v2;
 }
 
 double calcCos(const Vector& v1, const Vector& v2)
@@ -35,19 +33,19 @@ double calcAngle(const Vector& v1, const Vector& v2)
 
 double Angle::value()
 {
-    return calcAngle(&_v1, &_v2);
+    return calcAngle(*_v1, *_v2);
 }
 
 double Angle::orientedValue()
 {
-    double angleV1 = calcAngle(_u, &_v1) * ( _v1->y >= 0 ? 1.0 : -1.0 );
-    double angleV2 = calcAngle(_u, &_v2) * ( _v2->y >= 0 ? 1.0 : -1.0 );
+    double angleV1 = calcAngle(_u, *_v1) * ( _v1->y >= 0 ? 1.0 : -1.0 );
+    double angleV2 = calcAngle(_u, *_v2) * ( _v2->y >= 0 ? 1.0 : -1.0 );
 
     return angleV1 - angleV2;
 }
 
 double Angle::pseudoValue()
 {
-    double Cos = calcCos(&_v1, &_v2);
+    double Cos = calcCos(*_v1, *_v2);
     return 1 - Cos;
 }

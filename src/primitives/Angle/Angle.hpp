@@ -15,7 +15,7 @@ class Angle
         double pseudoValue();
 
     private:
-        Vector _u;
+        Vector _u = Vector(1.0, 0, 0);
         const Vector* _v1;
         const Vector* _v2;
 };

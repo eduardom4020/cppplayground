@@ -32,8 +32,8 @@ namespace op
     // const Vector& leftXZ(const Vector& v1, const Vector& v2);
     // const Vector& leftYZ(const Vector& v1, const Vector& v2);
 
-    template <typename T>
-    T left(const Vector& v1, const Vector& v2);
+    bool leftOf(const Vector& v1, const Vector& v2);
+    Vector left(const Vector& v1, const Vector& v2);
 }
 
 #endif
