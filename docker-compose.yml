@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  geo-mod:
+  geo-c:
     image: 'gcc:4.9'
     volumes:
       - ./src:/home
@@ -15,5 +15,5 @@ services:
         mkdir /build;
         mkdir /build/compiled;
         make all --directory=/home;
-        /build/geo_mod;
+        /build/geo_c;
       "

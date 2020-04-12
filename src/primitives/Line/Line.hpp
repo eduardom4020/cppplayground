@@ -7,13 +7,15 @@
 class Line
 {
     public:
-        Point* start;
-        Point* end;
+        const Point* start;
+        const Point* end;
         double length;
 
-        Line(Point& p_start, Point& p_end);
+        Line(const Point& p_start, const Point& p_end);
 
         std::string toString();
+
+        Vector toVector();
 };
 
 #endif

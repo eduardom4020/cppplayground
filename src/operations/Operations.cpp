@@ -88,31 +88,24 @@ Vector op::left(const Vector& v1, const Vector& v2)
     return cross_res >= 0 ? v1 : v2;
 }
 
-// double op::crossXY(const Vector& v1, const Vector& v2)
-// {
-//     return v1.x * v2.y - v1.y * v2.x;
-// }
+bool op::intersect(Line& l1, Line& l2)
+{
+    Vector l1_base = l1.toVector();
+    Vector l1_lower = Vector(*l1.start, *l2.start);
+    Vector l1_upper = Vector(*l1.start, *l2.end);
 
-// double op::crossXZ(const Vector& v1, const Vector& v2)
-// {
-//     return v1.x * v2.z - v1.z * v2.x;
-// }
+    double l1_base_lower = op::crossR2(l1_base, l1_lower);
+    double l1_base_upper = op::crossR2(l1_base, l1_upper);
 
-// double op::crossYZ(const Vector& v1, const Vector& v2)
-// {
-//     return v1.y * v2.z - v1.z * v2.y;
-// }
+    Vector l2_base = l2.toVector();
+    Vector l2_lower = Vector(*l2.start, *l1.start);
+    Vector l2_upper = Vector(*l2.start, *l1.end);
 
-// const Vector& leftXY(const Vector& v1, const Vector& v2)
-// {
-// }
+    double l2_base_lower = op::crossR2(l2_base, l2_lower);
+    double l2_base_upper = op::crossR2(l2_base, l2_upper);
 
-// const Vector& leftXZ(const Vector& v1, const Vector& v2)
-// {
+    bool l1_ok = l1_base_lower * l1_base_upper < 0;
+    bool l2_ok = l2_base_lower * l2_base_upper < 0;
 
-// }
-
-// const Vector& leftYZ(const Vector& v1, const Vector& v2)
-// {
-
-// }
+    return l1_ok && l2_ok;
+}

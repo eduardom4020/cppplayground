@@ -3,9 +3,14 @@
 
 #include "Point.hpp"
 #include "Vector.hpp"
+#include "Line.hpp"
 
 #include <math.h>
 #include <type_traits>
+
+class Point;
+class Vector;
+class Line;
 
 namespace op
 {
@@ -24,16 +29,11 @@ namespace op
 
     Vector cross(const Vector& v1, const Vector& v2);
     double crossR2(const Vector& v1, const Vector& v2);
-    // double crossXY(const Vector& v1, const Vector& v2);
-    // double crossXZ(const Vector& v1, const Vector& v2);
-    // double crossYZ(const Vector& v1, const Vector& v2);
-
-    // const Vector& leftXY(const Vector& v1, const Vector& v2);
-    // const Vector& leftXZ(const Vector& v1, const Vector& v2);
-    // const Vector& leftYZ(const Vector& v1, const Vector& v2);
 
     bool leftOf(const Vector& v1, const Vector& v2);
     Vector left(const Vector& v1, const Vector& v2);
+
+    bool intersect(Line& l1, Line& l2);
 }
 
 #endif
