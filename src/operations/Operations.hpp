@@ -3,14 +3,12 @@
 
 #include "Point.hpp"
 #include "Vector.hpp"
-#include "Line.hpp"
 
 #include <math.h>
 #include <type_traits>
 
 class Point;
 class Vector;
-class Line;
 
 namespace op
 {
@@ -32,8 +30,6 @@ namespace op
 
     bool leftOf(const Vector& v1, const Vector& v2);
     Vector left(const Vector& v1, const Vector& v2);
-
-    bool intersect(Line& l1, Line& l2);
 }
 
 #endif

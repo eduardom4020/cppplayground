@@ -6,3 +6,8 @@ Triangle::Triangle(Point& p1, Point&p2, Point& p3)
     points.push_back(&p2);
     points.push_back(&p3);
 }
+
+Point* Triangle::operator[](int index)
+{
+    return points[index];
+}

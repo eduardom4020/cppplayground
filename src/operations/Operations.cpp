@@ -87,25 +87,3 @@ Vector op::left(const Vector& v1, const Vector& v2)
     double cross_res = op::crossR2(v2, v1);
     return cross_res >= 0 ? v1 : v2;
 }
-
-bool op::intersect(Line& l1, Line& l2)
-{
-    Vector l1_base = l1.toVector();
-    Vector l1_lower = Vector(*l1.start, *l2.start);
-    Vector l1_upper = Vector(*l1.start, *l2.end);
-
-    double l1_base_lower = op::crossR2(l1_base, l1_lower);
-    double l1_base_upper = op::crossR2(l1_base, l1_upper);
-
-    Vector l2_base = l2.toVector();
-    Vector l2_lower = Vector(*l2.start, *l1.start);
-    Vector l2_upper = Vector(*l2.start, *l1.end);
-
-    double l2_base_lower = op::crossR2(l2_base, l2_lower);
-    double l2_base_upper = op::crossR2(l2_base, l2_upper);
-
-    bool l1_ok = l1_base_lower * l1_base_upper < 0;
-    bool l2_ok = l2_base_lower * l2_base_upper < 0;
-
-    return l1_ok && l2_ok;
-}

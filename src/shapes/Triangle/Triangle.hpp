@@ -9,8 +9,7 @@ class Triangle : public Polygon
     public:
         Triangle(Point& p1, Point&p2, Point& p3);
 
-        // double area();
-        // bool isCCW();
+        Point* operator[](int index);
         
     private:
         
