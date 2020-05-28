@@ -33,9 +33,9 @@ std::string Point::toString()
 {
     std::string out = "p( ";
     out.append(std::to_string(x));
-    out.append("\t");
+    out.append(", ");
     out.append(std::to_string(y));
-    out.append("\t");
+    out.append(", ");
     out.append(std::to_string(z));
     out.append(" )");
     return out;

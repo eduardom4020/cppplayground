@@ -7,8 +7,8 @@
 class Line
 {
     public:
-        const Point* start;
-        const Point* end;
+        Point* start;
+        Point* end;
         double length;
 
         Line(const Point& p_start, const Point& p_end);

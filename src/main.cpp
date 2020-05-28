@@ -2,29 +2,29 @@
 #include <map>
 
 #include "./operations/PolygonalOperations.hpp"
-#include "./shapes/Triangle/Triangle.hpp"
+#include "./object_components/Face/Face.hpp"
+#include "./object_components/Wedge/Wedge.hpp"
 
 int main(int argc, char const *argv[])
 {
-  std::cout << "Points Ordering" << std::endl;
+  std::cout << "Wedge Test" << std::endl;
 
-  Point p1 = Point(2, 0, 0);
-  Point p2 = Point(6, 0, 0);
-  Point p3 = Point(4, 2, 0);
-  Point p4 = Point(4, 1, 0);
-  Point p5 = Point(0, 0, 0);
-  Point p6 = Point(1, 4, 0);
-  Point p7 = Point(3, 3, 0);
-  Point p8 = Point(2, 6, 0);
-  Point p9 = Point(4, 6, 0);
-  Point p10 = Point(1, 1, 0);
+  Point p1 = Point(0, 0, 0);
+  Point p2 = Point(0, 1, 0);
+  Point p3 = Point(1, 0, 0);
+  Point p4 = Point(-1, 0, 0);
 
-  std::vector<Point *> points = { &p1, &p2, &p3, &p4, &p5, &p6, &p7, &p8, &p9, &p10 };
-  std::vector<Point *> sortedPoints = op::sortPoints(points);
+  Face f1 = Face(p1, p2, p3);
+  Face f2 = Face(p1, p4, p2);
 
-  for(auto const& point : sortedPoints)
+  try
   {
-    std::cout << point->toString() << std::endl;
+    Wedge e1 = Wedge(p1, p2, f2, f1);
+    std::cout << e1.toTerminal() << std::endl;
+  }
+  catch(char const* err)
+  {
+    std::cout << err << std::endl;
   }
   
   return 0;

@@ -1,14 +1,14 @@
 # My first makefile
 
-COMPILED_PATHS = ../build/compiled/main.o ../build/compiled/vector.o ../build/compiled/point.o ../build/compiled/operations.o ../build/compiled/line.o ../build/compiled/angle.o ../build/compiled/polygon.o ../build/compiled/triangle.o ../build/compiled/polygonal_operations.o
+COMPILED_PATHS = ../build/compiled/main.o ../build/compiled/vector.o ../build/compiled/point.o ../build/compiled/operations.o ../build/compiled/line.o ../build/compiled/angle.o ../build/compiled/polygon.o ../build/compiled/triangle.o ../build/compiled/polygonal_operations.o ../build/compiled/face.o ../build/compiled/wedge.o
 
 all: geo_c
 	clear
 
-geo_c: main.o vector.o point.o operations.o angle.o line.o polygon.o triangle.o polygonal_operations.o
+geo_c: main.o vector.o point.o operations.o angle.o line.o polygon.o triangle.o polygonal_operations.o face.o wedge.o
 	g++ -std=c++1y -o ../build/geo_c $(COMPILED_PATHS)
 
-main.o: vector.o point.o operations.o angle.o line.o polygon.o triangle.o polygonal_operations.o
+main.o: vector.o point.o operations.o angle.o line.o polygon.o triangle.o polygonal_operations.o face.o wedge.o
 	g++ -std=c++1y -o ../build/compiled/main.o -c ./main.cpp
 
 vector.o: point.o
@@ -34,6 +34,12 @@ triangle.o: operations.o
 
 polygonal_operations.o: operations.o polygon.o triangle.o
 	g++ -std=c++1y -o ../build/compiled/polygonal_operations.o -c ./operations/PolygonalOperations.cpp
+
+face.o: operations.o
+	g++ -std=c++1y -o ../build/compiled/face.o -c ./object_components/Face/Face.cpp
+
+wedge.o: operations.o
+	g++ -std=c++1y -o ../build/compiled/wedge.o -c ./object_components/Wedge/Wedge.cpp
 
 clean:
 	rm -rf *.o *~ geo_mod
