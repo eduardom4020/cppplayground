@@ -1,5 +1,14 @@
 #include "./Polygon.hpp"
 
+Polygon::Polygon()
+{
+}
+
+Polygon::Polygon(std::vector<Point *> _points)
+{
+    points = _points;
+}
+
 double Polygon::area()
 {
     double double_area = 0;

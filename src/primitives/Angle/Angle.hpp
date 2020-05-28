@@ -2,7 +2,7 @@
 #define ANGLE_H
 
 #include <iostream>
-#include "Operations.hpp"
+#include "../../operations/Operations.hpp"
 
 class Angle
 {    

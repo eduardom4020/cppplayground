@@ -4,7 +4,7 @@
 #include <iostream>
 #include <map>
 
-#include "Point.hpp"
+#include "../Point/Point.hpp"
 
 class Vector
 {    

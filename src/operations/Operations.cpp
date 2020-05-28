@@ -87,3 +87,20 @@ Vector op::left(const Vector& v1, const Vector& v2)
     double cross_res = op::crossR2(v2, v1);
     return cross_res >= 0 ? v1 : v2;
 }
+
+std::vector<Point *> op::sortPoints(std::vector<Point *> points, bool desc)
+{
+    auto pointComparison = [&desc](Point* p1, Point* p2)
+    {
+        bool p1_rt_p2 = (
+            ( p1->x > p2->x ) || 
+            ( p1->x == p2->x && p1->y > p2->y ) || 
+            ( p1->x == p2->x && p1->y == p2->y && p1->z >= p2->z )
+        );
+        return desc && p1_rt_p2;
+    };
+
+    std::vector<Point *> output = points;
+    std::sort( output.begin(), output.end(), pointComparison );
+    return output;
+}

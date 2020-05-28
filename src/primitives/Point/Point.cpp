@@ -31,9 +31,12 @@ Point::Point(const std::map<std::string, double>& coords)
 
 std::string Point::toString()
 {
-    std::string out = "\nPoint Info:\n";
-    out.append("\tx: "); out.append(std::to_string(x)); out.append("\n");
-    out.append("\ty: "); out.append(std::to_string(y)); out.append("\n");
-    out.append("\tz: "); out.append(std::to_string(z)); out.append("\n");
+    std::string out = "p( ";
+    out.append(std::to_string(x));
+    out.append("\t");
+    out.append(std::to_string(y));
+    out.append("\t");
+    out.append(std::to_string(z));
+    out.append(" )");
     return out;
 }

@@ -2,7 +2,7 @@
 #define TRIANGLE_H
 
 #include <iostream>
-#include "Polygon.hpp"
+#include "../Polygon/Polygon.hpp"
 
 class Triangle : public Polygon
 {    

@@ -2,7 +2,7 @@
 #define LINE_H
 
 #include <iostream>
-#include "Operations.hpp"
+#include "../../operations/Operations.hpp"
 
 class Line
 {

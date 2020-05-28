@@ -2,11 +2,13 @@
 #define POLYGON_H
 
 #include <vector>
-#include "Operations.hpp"
+#include "../../operations/Operations.hpp"
 
 class Polygon
 {    
     public:
+        Polygon();
+        Polygon(std::vector<Point *> _points);
         std::vector<Point *> points;
 
         double area();

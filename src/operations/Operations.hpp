@@ -1,11 +1,13 @@
 #ifndef NSP_OP_H
 #define NSP_OP_H
 
-#include "Point.hpp"
-#include "Vector.hpp"
+#include "../primitives/Point/Point.hpp"
+#include "../primitives/Vector/Vector.hpp"
 
 #include <math.h>
 #include <type_traits>
+#include <vector>
+#include <algorithm> 
 
 class Point;
 class Vector;
@@ -30,6 +32,8 @@ namespace op
 
     bool leftOf(const Vector& v1, const Vector& v2);
     Vector left(const Vector& v1, const Vector& v2);
+
+    std::vector<Point *> sortPoints(std::vector<Point *> points, bool desc=true);
 }
 
 #endif
