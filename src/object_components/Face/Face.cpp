@@ -2,6 +2,11 @@
 
 Face::Face(Point& p1, Point&p2, Point& p3) : Triangle(p1, p2, p3)
 {
+    Vector v1 = Vector(p1, p3);
+    Vector v2 = Vector(p1, p2);
+
+    crossRes = op::cross(v1, v2);
+    normal = Normal(crossRes);
 }
 
 Point* Face::getLeastPoint(Point& start, Point& end)
@@ -17,4 +22,16 @@ Point* Face::getLeastPoint(Point& start, Point& end)
     else {
         return points[1];
     }
+}
+
+std::string Face::toString()
+{
+    std::string out = "[ ";
+    out.append(points[0]->toString());
+    out.append(" ");
+    out.append(points[1]->toString());
+    out.append(" ");
+    out.append(points[2]->toString());
+    out.append(" ]");
+    return out;
 }

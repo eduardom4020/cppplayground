@@ -1,25 +1,49 @@
 #include "./Wedge.hpp"
 
+Wedge::Wedge(Point& _start, Point& _end) : Line(_start, _end)
+{
+}
+
 Wedge::Wedge(Point& _start, Point& _end, Face& ccwFace, Face& cwFace) : Line(_start, _end)
 {
-    Point* leastCcwPoint = ccwFace.getLeastPoint(_start, _end);
-    Face ccwFaceCandidate = Face(_start, _end, *leastCcwPoint);
+    setFccw(ccwFace);
+    setFcw(cwFace);
+}
+
+void Wedge::setFccw(Face& ccwFace)
+{
+    Point* leastCcwPoint = ccwFace.getLeastPoint(*start, *end);
+    Face ccwFaceCandidate = Face(*start, *end, *leastCcwPoint);
 
     if(!ccwFaceCandidate.isCCW())
     {
         throw "ccwFace is not correct";
     }
 
-    Point* leastCwPoint = cwFace.getLeastPoint(_start, _end);
-    Face cwFaceCandidate = Face(_start, _end, *leastCwPoint);
+    Fccw = &ccwFace;
+}
+
+Face* Wedge::getFccw()
+{
+    return Fccw;
+}
+
+void Wedge::setFcw(Face& cwFace)
+{
+    Point* leastCwPoint = cwFace.getLeastPoint(*start, *end);
+    Face cwFaceCandidate = Face(*start, *end, *leastCwPoint);
 
     if(cwFaceCandidate.isCCW())
     {
         throw "cwFace is not correct";
     }
 
-    Fccw = &ccwFace;
     Fcw = &cwFace;
+}
+
+Face* Wedge::getFcw()
+{
+    return Fcw;
 }
 
 std::string Wedge::toTerminal()

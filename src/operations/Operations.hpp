@@ -3,14 +3,14 @@
 
 #include "../primitives/Point/Point.hpp"
 #include "../primitives/Vector/Vector.hpp"
+#include "../primitives/Normal/Normal.hpp"
 
 #include <math.h>
 #include <type_traits>
 #include <vector>
-#include <algorithm> 
+#include <algorithm>
 
-class Point;
-class Vector;
+class Normal;
 
 namespace op
 {
@@ -24,6 +24,7 @@ namespace op
     Vector mult(double lambda, const Vector& v);
     
     double dot(const Vector& v1, const Vector& v2);
+    double dotNormal(Normal& n1, Normal& n2);
     double sqrLen(const Vector& v);
     double len(const Vector& v);
 

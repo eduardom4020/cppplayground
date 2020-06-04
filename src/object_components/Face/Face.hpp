@@ -3,16 +3,23 @@
 
 #include <iostream>
 #include "../../shapes/Triangle/Triangle.hpp"
+#include "../../primitives/Normal/Normal.hpp"
+#include "../../primitives/Vector/Vector.hpp"
+#include "../../operations/Operations.hpp"
 
 class Face : public Triangle
 {    
     public:
+        Normal normal;
+
         Face(Point& p1, Point&p2, Point& p3);
 
         Point* getLeastPoint(Point& start, Point& end);
 
+        std::string toString();
+
     private:
-        
+        Vector crossRes;
 };
 
 #endif

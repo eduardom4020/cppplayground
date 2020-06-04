@@ -1,18 +1,20 @@
 #ifndef NSP_POP_H
 #define NSP_POP_H
 
+#include <iostream>
+
 #include "./Operations.hpp"
 #include "../shapes/Line/Line.hpp"
 #include "../shapes/Polygon/Polygon.hpp"
 #include "../shapes/Triangle/Triangle.hpp"
+#include "../object_components/Face/Face.hpp"
+#include "../object_components/Wedge/Wedge.hpp"
 
+#include <cmath>
 #include <math.h>
 #include <type_traits>
 #include <vector>
-
-class Line;
-class Polygon;
-class Triangle;
+#include <algorithm>
 
 namespace op
 {
@@ -20,7 +22,8 @@ namespace op
     std::vector<double> baricentricCoordnates(Point& point, Triangle& triangle);
     bool isInside(Point& point, Triangle& triangle);
 
-    Polygon giftWrap3D(std::vector<Point *> points);
+    std::vector<Face> giftWrap3D(std::vector<Point *> points);
+    bool equal(Wedge& e1, Wedge& e2);
 }
 
 #endif

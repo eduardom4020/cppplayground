@@ -1,14 +1,16 @@
 # My first makefile
 
-COMPILED_PATHS = ../build/compiled/main.o ../build/compiled/vector.o ../build/compiled/point.o ../build/compiled/operations.o ../build/compiled/line.o ../build/compiled/angle.o ../build/compiled/polygon.o ../build/compiled/triangle.o ../build/compiled/polygonal_operations.o ../build/compiled/face.o ../build/compiled/wedge.o
+COMPILED_PATHS = ../build/compiled/main.o ../build/compiled/vector.o ../build/compiled/point.o ../build/compiled/operations.o ../build/compiled/line.o ../build/compiled/normal.o ../build/compiled/angle.o ../build/compiled/polygon.o ../build/compiled/triangle.o ../build/compiled/polygonal_operations.o ../build/compiled/face.o ../build/compiled/wedge.o
+
+REQUISITES = main.o vector.o point.o operations.o normal.o angle.o line.o polygon.o triangle.o polygonal_operations.o face.o wedge.o
 
 all: geo_c
 	clear
 
-geo_c: main.o vector.o point.o operations.o angle.o line.o polygon.o triangle.o polygonal_operations.o face.o wedge.o
+geo_c: $(REQUISITES) main.o
 	g++ -std=c++1y -o ../build/geo_c $(COMPILED_PATHS)
 
-main.o: vector.o point.o operations.o angle.o line.o polygon.o triangle.o polygonal_operations.o face.o wedge.o
+main.o: $(REQUISITES)
 	g++ -std=c++1y -o ../build/compiled/main.o -c ./main.cpp
 
 vector.o: point.o
@@ -22,6 +24,9 @@ operations.o: point.o vector.o
 
 angle.o: operations.o
 	g++ -std=c++1y -o ../build/compiled/angle.o -c ./primitives/Angle/Angle.cpp
+
+normal.o: operations.o
+	g++ -std=c++1y -o ../build/compiled/normal.o -c ./primitives/Normal/Normal.cpp
 
 line.o: operations.o
 	g++ -std=c++1y -o ../build/compiled/line.o -c ./shapes/Line/Line.cpp

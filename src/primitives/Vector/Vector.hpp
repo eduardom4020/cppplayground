@@ -11,6 +11,7 @@ class Vector
     public:
         double x, y, z;
 
+        Vector();
         Vector(const Point& p);
         Vector(const Point& start, const Point& end);
         Vector(double X, double Y, double Z);

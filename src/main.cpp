@@ -7,24 +7,30 @@
 
 int main(int argc, char const *argv[])
 {
-  std::cout << "Wedge Test" << std::endl;
+  std::cout << "3D Hull Test" << std::endl;
 
-  Point p1 = Point(0, 0, 0);
-  Point p2 = Point(0, 1, 0);
-  Point p3 = Point(1, 0, 0);
-  Point p4 = Point(-1, 0, 0);
+  Point p0 = Point(0, 0, 0);
+  Point p1 = Point(-1, 0, 0);
+  Point p2 = Point(0, -1, 0);
+  Point p3 = Point(0, 1, 0);
+  Point p4 = Point(0, 0, 1);
+  Point p5 = Point(0, 0, -1);
+  Point p6 = Point(1, 0, 0);
 
-  Face f1 = Face(p1, p2, p3);
-  Face f2 = Face(p1, p4, p2);
+  std::vector<Point *> pointsCloud = { &p0, &p1, &p2, &p3, &p4, &p5, &p6 };
 
   try
   {
-    Wedge e1 = Wedge(p1, p2, f2, f1);
-    std::cout << e1.toTerminal() << std::endl;
+    std::vector<Face> hull = op::giftWrap3D(pointsCloud);
+    for(auto& face : hull)
+    {
+      std::cout << face.toString() << std::endl;
+    }
   }
-  catch(char const* err)
+  catch(char const* exception)
   {
-    std::cout << err << std::endl;
+    std::cout << "ERROR!" << std::endl;
+    std::cout << exception << std::endl;
   }
   
   return 0;

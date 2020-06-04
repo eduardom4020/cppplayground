@@ -104,3 +104,12 @@ std::vector<Point *> op::sortPoints(std::vector<Point *> points, bool desc)
     std::sort( output.begin(), output.end(), pointComparison );
     return output;
 }
+
+double op::dotNormal(Normal& n1, Normal& n2)
+{
+    double x = n1.x * n2.x;
+    double y = n1.y * n2.y;
+    double z = n1.z * n2.z;
+
+    return x + y + z;
+}
