@@ -158,7 +158,7 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
         }
 
         std::cout << "EXITED FOR LOOP, found position is " << pFoundPos3 << std::endl;
-        Face selectedFace = Face(*edge->end, *edge->start, *sortedPoints[pFoundPos3]);
+        Face selectedFace = Face(*edge->start, *edge->end, *sortedPoints[pFoundPos3]);
         std::cout << "selectedFace\t" << selectedFace.toString() << std::endl;
         
         hull.push_back(selectedFace);
