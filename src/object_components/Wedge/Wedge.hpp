@@ -15,6 +15,7 @@ class Wedge : public Line
         Wedge* cwNext;
 
         Wedge(Point& _start, Point& _end);
+        Wedge(Point& _start, Point& _end, Face& cwFace);
         Wedge(Point& _start, Point& _end, Face& ccwFace, Face& cwFace);
 
         void setFccw(Face& ccwFace);
@@ -24,6 +25,8 @@ class Wedge : public Line
         Face* getFcw();
 
         std::string toTerminal();
+
+        bool operator==(Wedge& edge);
 
     private:
         Face* Fccw;

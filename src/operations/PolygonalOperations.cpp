@@ -49,63 +49,9 @@ bool op::equal(Wedge& e1, Wedge& e2)
     return e1.start == e2.start && e1.end == e2.end;
 }
 
-Face wrapASide(std::vector<Point *>& sortedPoints, Wedge& edge)
+Face makeFirstFace(std::vector<Point *>& sortedPoints)
 {
-    double minAngularValue = INFINITY;
-    int pFoundPos = -1;
-
-    Face* facePointer = edge.getFcw();
-    Face face = facePointer->toCW();
-
-    for (int i=0; i < sortedPoints.size(); i++)
-    {
-        if(sortedPoints[i] != edge.start && sortedPoints[i] != edge.end) 
-        {
-            Face fCandidate = Face(*edge.start, *sortedPoints[i], *edge.end);
-
-            // Angle angle = Angle(face->normal, fCandidate.normal);
-            // std::cout << "face\t\t" << face->toString() << std::endl;
-            // std::cout << "face\t\t" << face.toString() << std::endl;
-            // std::cout << "fCandidate\t\t" << fCandidate.toString() << std::endl;
-            // double angularValue = angle.orientedValue();
-            double angularValue = 1 - op::dot(face.normal, fCandidate.normal);
-            // std::cout << "angularValue\t\t" << angularValue << std::endl;
-
-            if(angularValue < minAngularValue)
-            {
-                pFoundPos = i;
-                minAngularValue = angularValue;
-            }
-        }
-    }
-
-    if(pFoundPos < 0)
-    {
-        throw "Unable to create hull. Please check if your point coordinates make this operation valid.";
-    }
-
-    // TODO: Aparentemente esta mudança deu certo. Agora o que bugou foi a lógica das arestas livres?
-    Face selectedFace = Face(*edge.start, *sortedPoints[pFoundPos], *edge.end);
-    // std::cout << "selectedFace\t\t" << selectedFace.toString() << selectedFace.isCCW() << std::endl;
-
-    return selectedFace;
-}
-
-std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
-{
-    std::cout << "op::giftWrap3D DEBUG" << std::endl;
-
-    std::vector<Face> hull = {};
-    std::vector<Wedge> edges = {};
-    std::vector<Wedge *> freeEdges = {};
-    std::vector<Point *> sortedPoints = op::sortPoints(points);
-    
     Point* pYMin = sortedPoints.back();
-    std::cout << "sortedPoints\t\t" << std::endl;
-    for(auto* point : sortedPoints)
-    {
-        std::cout << point->toString() << std::endl;
-    }
 
     Point pYMinProjX = Point(pYMin->x + 1, pYMin->y, pYMin->z);
     Point pYMinProjZ = Point(pYMin->x, pYMin->y, pYMin->z - 1);
@@ -120,13 +66,8 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
         if(sortedPoints[i] != pYMin) 
         {
             Face fCandidate = Face(*pYMin, *sortedPoints[i], pYMinProjX);
-            
-            // Angle angle = Angle(fYMin.normal, fCandidate.normal);
-            // std::cout << "fYMin\t\t" << fYMin.toString() << std::endl;
-            // std::cout << "fCandidate\t\t" << fCandidate.toString() << std::endl;
-            // double angularValue = angle.orientedValue();
+
             double angularValue = 1 - op::dot(fYMin.normal, fCandidate.normal);
-            // std::cout << "angularValue\t\t" << angularValue << std::endl;
             
             if(angularValue < minAngularValue)
             {
@@ -142,7 +83,6 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
     }
 
     Point* pFirstEncountered = sortedPoints[pFoundPos];
-    // sortedPoints.erase(sortedPoints.begin() + pFoundPos);
 
     Face preFace1 = Face(*pYMin, *pFirstEncountered, pYMinProjX);
 
@@ -155,8 +95,6 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
         {
             Face fCandidate = Face(*pYMin, *sortedPoints[i], *pFirstEncountered);
             
-            // Angle angle = Angle(preFace1.normal, fCandidate.normal);
-            // double angularValue = angle.orientedValue();
             double angularValue = 1 - op::dot(preFace1.normal, fCandidate.normal);
             if(angularValue < minAngularValue)
             {
@@ -172,74 +110,170 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
     }
 
     Point* pSecondEncountered = sortedPoints[pFoundPos];
-    // sortedPoints.erase(sortedPoints.begin() + pFoundPos);
 
-    Face f1 = Face(*pYMin, *pSecondEncountered, *pFirstEncountered);
-    hull.push_back(f1);
+    Face firstFace = Face(*pYMin, *pSecondEncountered, *pFirstEncountered);
 
-    std::cout << "f1\t\t" << hull.back().toString() << std::endl;
-    
-    edges.push_back(Wedge(*f1[0], *f1[1]));
-    edges.push_back(Wedge(*f1[1], *f1[2]));
-    edges.push_back(Wedge(*f1[2], *f1[0]));
+    return firstFace;
+}
 
-    edges[0].setFcw(f1);
-    edges[1].setFcw(f1);
-    edges[2].setFcw(f1);
+Face wrapASide(std::vector<Point *>& sortedPoints, Wedge& edge)
+{
+    double minAngularValue = INFINITY;
+    int pFoundPos = -1;
 
-    freeEdges.push_back(&edges[0]);
-    freeEdges.push_back(&edges[1]);
-    // freeEdges.push_back(&edges[2]);
+    Face* facePointer = edge.getFcw();
+    Face face = facePointer->toCW();
 
-    while(!freeEdges.empty())
+    for (int i=0; i < sortedPoints.size(); i++)
     {
-        // double minDot3 = INFINITY;
-        // int pFoundPos3 = -1;
-
-        Wedge* edge = freeEdges.back();
-        freeEdges.pop_back();
-
-        std::cout << "edge\t\t" << edge->start->toString() << edge->end->toString() << std::endl;
-        Face selectedFace = wrapASide(sortedPoints, *edge);
-        
-        hull.push_back(selectedFace);
-        std::cout << "hull updated\t\t" << hull.back().toString() << std::endl;
-        edge->setFccw(hull.back());
-
-        Wedge e2 = Wedge(*selectedFace[1], *selectedFace[2]);
-        Wedge e3 = Wedge(*selectedFace[2], *selectedFace[0]);
-
-        bool isE2New = true;
-        bool isE3New = true;
-
-        for(auto someEdge : edges)
+        if(sortedPoints[i] != edge.start && sortedPoints[i] != edge.end) 
         {
-            if(op::equal(someEdge, e2))
+            Face fCandidate = Face(*edge.start, *sortedPoints[i], *edge.end);
+
+            double angularValue = 1 - op::dot(face.normal, fCandidate.normal);
+
+            if(angularValue < minAngularValue)
             {
-                isE2New = false;
+                pFoundPos = i;
+                minAngularValue = angularValue;
             }
-
-            if(op::equal(someEdge, e3))
-            {
-                isE3New = false;
-            }
-            
-        }
-
-        if(isE2New)
-        {
-            edges.push_back(e2);
-            edges.back().setFcw(hull.back());
-            // freeEdges.push_back(&edges.back());
-        }
-
-        if(isE3New)
-        {
-            edges.push_back(e3);
-            edges.back().setFcw(hull.back());
-            // freeEdges.push_back(&edges.back());
         }
     }
+
+    if(pFoundPos < 0)
+    {
+        throw "Unable to create hull. Please check if your point coordinates make this operation valid.";
+    }
+
+    Face selectedFace = Face(*edge.start, *sortedPoints[pFoundPos], *edge.end);
+
+    return selectedFace;
+}
+
+bool isEdgeNew(std::vector<Wedge>& edges, Wedge& edge)
+{
+    for(auto& e : edges)
+    {
+        if(e == edge)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
+{
+    std::cout << "op::giftWrap3D DEBUG" << std::endl;
+
+    std::vector<Face> hull = {};
+    std::vector<Wedge> edges = {};
+    std::vector<Wedge *> freeEdges = {};
+    std::vector<Point *> sortedPoints = op::sortPoints(points);
+    
+    Face firstFace = makeFirstFace(sortedPoints);
+    hull.push_back(firstFace);
+    
+    Wedge e1 = Wedge(*hull.back()[0], *hull.back()[1], hull.back());
+    Wedge e2 = Wedge(*hull.back()[1], *hull.back()[2], hull.back());
+    Wedge e3 = Wedge(*hull.back()[2], *hull.back()[0], hull.back());
+
+    edges.push_back(e1);
+    edges.push_back(e2);
+    edges.push_back(e3);
+
+    edges[0].cwNext = &edges[1];
+    edges[0].cwPrev = &edges[2];
+    
+    edges[1].cwNext = &edges[2];
+    edges[1].cwPrev = &edges[0];
+    
+    edges[2].cwNext = &edges[0];
+    edges[2].cwPrev = &edges[1];
+
+    // std::cout << "&edges[0]\t\t" << &edges.front() << std::endl;
+
+    // freeEdges.push_back(&edges[0]);
+    // freeEdges.push_back(&edges[1]);
+    // freeEdges.push_back(&edges[2]);
+
+    // std::cout << "isEdgeNew(edges, e1)\t" << (isEdgeNew(edges, test) ? "T" : "F") << std::endl;
+
+    // edges[0].setFcw(f1);
+    // edges[1].setFcw(f1);
+    // edges[2].setFcw(f1);
+
+    // freeEdges.push_back(&edges[0]);
+    // freeEdges.push_back(&edges[1]);
+    // freeEdges.push_back(&edges[2]);
+
+    // while(!freeEdges.empty())
+    // {
+    //     std::cout << "freeEdges\t\t" << std::endl;
+    //     for(auto* edge : freeEdges)
+    //     {
+    //         std::cout << edge->start->toString() << "\t" << edge->end->toString() << std::endl;
+    //     }
+    //     // double minDot3 = INFINITY;
+    //     // int pFoundPos3 = -1;
+
+    //     Wedge* edge = freeEdges.back();
+    //     freeEdges.pop_back();
+
+    //     std::cout << "edge\t\t" << edge->start->toString() << edge->end->toString() << std::endl;
+    //     Face selectedFace = wrapASide(sortedPoints, *edge);
+        
+    //     hull.push_back(selectedFace);
+    //     std::cout << "hull updated\t\t" << hull.back().toString() << std::endl;
+    //     edge->setFccw(hull.back());
+
+    //     // Wedge e2 = Wedge(*selectedFace[1], *selectedFace[2]);
+    //     // Wedge e3 = Wedge(*selectedFace[2], *selectedFace[0]);
+
+    //     // edges.push_back(Wedge(*hull.back()[1], *hull.back()[2]));
+    //     // edges.back().setFcw(hull.back());
+
+    //     // edges.push_back(Wedge(*hull.back()[2], *hull.back()[0]));
+    //     // edges.back().setFcw(hull.back());
+
+    //     std::cout << "edges\t\t" << std::endl;
+    //     for(auto& edge : edges)
+    //     {
+    //         std::cout << edge.start->toString() << "\t" << edge.end->toString() << std::endl;
+    //     }
+
+    //     // bool isE2New = true;
+    //     // bool isE3New = true;
+
+    //     // for(auto someEdge : edges)
+    //     // {
+    //     //     if(op::equal(someEdge, e2))
+    //     //     {
+    //     //         isE2New = false;
+    //     //     }
+
+    //     //     if(op::equal(someEdge, e3))
+    //     //     {
+    //     //         isE3New = false;
+    //     //     }
+            
+    //     // }
+
+    //     // if(isE2New)
+    //     // {
+    //     //     edges.push_back(e2);
+    //     //     edges.back().setFcw(hull.back());
+    //     //     // freeEdges.push_back(&edges.back());
+    //     // }
+
+    //     // if(isE3New)
+    //     // {
+    //     //     edges.push_back(e3);
+    //     //     edges.back().setFcw(hull.back());
+    //     //     // freeEdges.push_back(&edges.back());
+    //     // }
+    // }
 
     return hull;
 }

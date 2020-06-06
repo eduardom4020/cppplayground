@@ -2,12 +2,35 @@
 
 Wedge::Wedge(Point& _start, Point& _end) : Line(_start, _end)
 {
+    Fcw = nullptr;
+    Fccw = nullptr;
+
+    ccwPrev = nullptr;
+    ccwNext = nullptr;
+    cwPrev = nullptr;
+    cwNext = nullptr;
+}
+
+Wedge::Wedge(Point& _start, Point& _end, Face& cwFace) : Line(_start, _end)
+{
+    setFcw(cwFace);
+    Fccw = nullptr;
+
+    ccwPrev = nullptr;
+    ccwNext = nullptr;
+    cwPrev = nullptr;
+    cwNext = nullptr;
 }
 
 Wedge::Wedge(Point& _start, Point& _end, Face& ccwFace, Face& cwFace) : Line(_start, _end)
 {
     setFccw(ccwFace);
     setFcw(cwFace);
+
+    ccwPrev = nullptr;
+    ccwNext = nullptr;
+    cwPrev = nullptr;
+    cwNext = nullptr;
 }
 
 void Wedge::setFccw(Face& ccwFace)
@@ -62,4 +85,9 @@ std::string Wedge::toTerminal()
     out.append("\t\t\t    ");
     out.append(start->toString());
     return out;
+}
+
+bool Wedge::operator==(Wedge& edge)
+{
+    return start == edge.start && end == edge.end;
 }
