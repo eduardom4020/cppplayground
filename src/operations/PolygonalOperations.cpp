@@ -194,9 +194,9 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
 
     // std::cout << "&edges[0]\t\t" << &edges.front() << std::endl;
 
-    // freeEdges.push_back(&edges[0]);
-    // freeEdges.push_back(&edges[1]);
-    // freeEdges.push_back(&edges[2]);
+    freeEdges.push_back(&edges[0]);
+    freeEdges.push_back(&edges[1]);
+    freeEdges.push_back(&edges[2]);
 
     // std::cout << "isEdgeNew(edges, e1)\t" << (isEdgeNew(edges, test) ? "T" : "F") << std::endl;
 
@@ -208,18 +208,25 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
     // freeEdges.push_back(&edges[1]);
     // freeEdges.push_back(&edges[2]);
 
-    // while(!freeEdges.empty())
-    // {
-    //     std::cout << "freeEdges\t\t" << std::endl;
-    //     for(auto* edge : freeEdges)
-    //     {
-    //         std::cout << edge->start->toString() << "\t" << edge->end->toString() << std::endl;
-    //     }
+    while(!freeEdges.empty())
+    {
+        std::cout << "freeEdges\t\t" << std::endl;
+        for(auto* edge : freeEdges)
+        {
+            std::cout << edge->start->toString() << "\t" << edge->end->toString() << std::endl;
+        }
     //     // double minDot3 = INFINITY;
     //     // int pFoundPos3 = -1;
 
     //     Wedge* edge = freeEdges.back();
-    //     freeEdges.pop_back();
+        freeEdges.pop_back();
+        Wedge eTest = Wedge(*sortedPoints[3], *sortedPoints[4]);
+        if(isEdgeNew(edges, eTest))
+        {
+            edges.push_back(eTest);
+            freeEdges.push_back(&edges.back());
+        }
+        
 
     //     std::cout << "edge\t\t" << edge->start->toString() << edge->end->toString() << std::endl;
     //     Face selectedFace = wrapASide(sortedPoints, *edge);
@@ -273,7 +280,7 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
     //     //     edges.back().setFcw(hull.back());
     //     //     // freeEdges.push_back(&edges.back());
     //     // }
-    // }
+    }
 
     return hull;
 }
