@@ -9,6 +9,7 @@
 #include "../shapes/Triangle/Triangle.hpp"
 #include "../object_components/Face/Face.hpp"
 #include "../object_components/Wedge/Wedge.hpp"
+#include "../primitives/Angle/Angle.hpp"
 
 #include <cmath>
 #include <math.h>

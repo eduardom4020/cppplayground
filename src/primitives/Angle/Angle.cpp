@@ -38,8 +38,8 @@ double Angle::value()
 
 double Angle::orientedValue()
 {
-    double angleV1 = calcAngle(_u, *_v1) * ( _v1->y >= 0 ? 1.0 : -1.0 );
-    double angleV2 = calcAngle(_u, *_v2) * ( _v2->y >= 0 ? 1.0 : -1.0 );
+    double angleV1 = _v1->y >= 0 ? calcAngle(_u, *_v1) : 2 * 3.1415 - calcAngle(_u, *_v1);
+    double angleV2 = _v2->y >= 0 ? calcAngle(_u, *_v2) : 2 * 3.1415 - calcAngle(_u, *_v2);
 
     return angleV1 - angleV2;
 }

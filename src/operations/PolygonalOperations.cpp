@@ -49,6 +49,48 @@ bool op::equal(Wedge& e1, Wedge& e2)
     return e1.start == e2.start && e1.end == e2.end;
 }
 
+Face wrapASide(std::vector<Point *>& sortedPoints, Wedge& edge)
+{
+    double minAngularValue = INFINITY;
+    int pFoundPos = -1;
+
+    Face* facePointer = edge.getFcw();
+    Face face = facePointer->toCW();
+
+    for (int i=0; i < sortedPoints.size(); i++)
+    {
+        if(sortedPoints[i] != edge.start && sortedPoints[i] != edge.end) 
+        {
+            Face fCandidate = Face(*edge.start, *sortedPoints[i], *edge.end);
+
+            // Angle angle = Angle(face->normal, fCandidate.normal);
+            // std::cout << "face\t\t" << face->toString() << std::endl;
+            // std::cout << "face\t\t" << face.toString() << std::endl;
+            // std::cout << "fCandidate\t\t" << fCandidate.toString() << std::endl;
+            // double angularValue = angle.orientedValue();
+            double angularValue = 1 - op::dot(face.normal, fCandidate.normal);
+            // std::cout << "angularValue\t\t" << angularValue << std::endl;
+
+            if(angularValue < minAngularValue)
+            {
+                pFoundPos = i;
+                minAngularValue = angularValue;
+            }
+        }
+    }
+
+    if(pFoundPos < 0)
+    {
+        throw "Unable to create hull. Please check if your point coordinates make this operation valid.";
+    }
+
+    // TODO: Aparentemente esta mudança deu certo. Agora o que bugou foi a lógica das arestas livres?
+    Face selectedFace = Face(*edge.start, *sortedPoints[pFoundPos], *edge.end);
+    // std::cout << "selectedFace\t\t" << selectedFace.toString() << selectedFace.isCCW() << std::endl;
+
+    return selectedFace;
+}
+
 std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
 {
     std::cout << "op::giftWrap3D DEBUG" << std::endl;
@@ -59,13 +101,18 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
     std::vector<Point *> sortedPoints = op::sortPoints(points);
     
     Point* pYMin = sortedPoints.back();
+    std::cout << "sortedPoints\t\t" << std::endl;
+    for(auto* point : sortedPoints)
+    {
+        std::cout << point->toString() << std::endl;
+    }
 
     Point pYMinProjX = Point(pYMin->x + 1, pYMin->y, pYMin->z);
     Point pYMinProjZ = Point(pYMin->x, pYMin->y, pYMin->z - 1);
 
     Face fYMin = Face(*pYMin, pYMinProjZ, pYMinProjX);
 
-    double minDot1 = INFINITY;
+    double minAngularValue = INFINITY;
     int pFoundPos = -1;
 
     for (int i=0; i < sortedPoints.size(); i++)
@@ -73,41 +120,59 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
         if(sortedPoints[i] != pYMin) 
         {
             Face fCandidate = Face(*pYMin, *sortedPoints[i], pYMinProjX);
-            double dot = op::dotNormal(fYMin.normal, fCandidate.normal);
-
-            if(dot < minDot1)
+            
+            // Angle angle = Angle(fYMin.normal, fCandidate.normal);
+            // std::cout << "fYMin\t\t" << fYMin.toString() << std::endl;
+            // std::cout << "fCandidate\t\t" << fCandidate.toString() << std::endl;
+            // double angularValue = angle.orientedValue();
+            double angularValue = 1 - op::dot(fYMin.normal, fCandidate.normal);
+            // std::cout << "angularValue\t\t" << angularValue << std::endl;
+            
+            if(angularValue < minAngularValue)
             {
                 pFoundPos = i;
-                minDot1 = dot;
+                minAngularValue = angularValue;
             }
         }
     }
 
+    if(pFoundPos < 0)
+    {
+        throw "Unable to create hull. Please check if your point coordinates make this operation valid.";
+    }
+
     Point* pFirstEncountered = sortedPoints[pFoundPos];
-    sortedPoints.erase(sortedPoints.begin() + pFoundPos);
+    // sortedPoints.erase(sortedPoints.begin() + pFoundPos);
 
     Face preFace1 = Face(*pYMin, *pFirstEncountered, pYMinProjX);
 
-    double minDot2 = INFINITY;
-    int pFoundPos2 = -1;
+    minAngularValue = INFINITY;
+    pFoundPos = -1;
 
     for (int i=0; i < sortedPoints.size(); i++)
     {
         if(sortedPoints[i] != pYMin && sortedPoints[i] != pFirstEncountered) 
         {
-            Face fCandidate = Face(*pYMin, *pFirstEncountered, *sortedPoints[i]);
-            double dot = op::dotNormal(preFace1.normal, fCandidate.normal);
-
-            if(dot < minDot2)
+            Face fCandidate = Face(*pYMin, *sortedPoints[i], *pFirstEncountered);
+            
+            // Angle angle = Angle(preFace1.normal, fCandidate.normal);
+            // double angularValue = angle.orientedValue();
+            double angularValue = 1 - op::dot(preFace1.normal, fCandidate.normal);
+            if(angularValue < minAngularValue)
             {
-                pFoundPos2 = i;
-                minDot2 = dot;
+                pFoundPos = i;
+                minAngularValue = angularValue;
             }
         }
     }
 
-    Point* pSecondEncountered = sortedPoints[pFoundPos2];
-    sortedPoints.erase(sortedPoints.begin() + pFoundPos2);
+    if(pFoundPos < 0)
+    {
+        throw "Unable to create hull. Please check if your point coordinates make this operation valid.";
+    }
+
+    Point* pSecondEncountered = sortedPoints[pFoundPos];
+    // sortedPoints.erase(sortedPoints.begin() + pFoundPos);
 
     Face f1 = Face(*pYMin, *pSecondEncountered, *pFirstEncountered);
     hull.push_back(f1);
@@ -124,45 +189,21 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
 
     freeEdges.push_back(&edges[0]);
     freeEdges.push_back(&edges[1]);
-    freeEdges.push_back(&edges[2]);
+    // freeEdges.push_back(&edges[2]);
 
     while(!freeEdges.empty())
     {
-        double minDot3 = INFINITY;
-        int pFoundPos3 = -1;
+        // double minDot3 = INFINITY;
+        // int pFoundPos3 = -1;
 
         Wedge* edge = freeEdges.back();
         freeEdges.pop_back();
 
-        Face* face = edge->getFcw();
-
-        std::cout << "face\t" << face->toString() << std::endl;
-
-        for (int i=0; i < sortedPoints.size(); i++)
-        {
-            if(sortedPoints[i] != edge->start && sortedPoints[i] != edge->end) 
-            {
-                Face fCandidate = Face(*edge->end, *edge->start, *sortedPoints[i]);
-                double dot = op::dotNormal(face->normal, fCandidate.normal);
-                if(!isnan(dot) && dot < minDot3)
-                {
-                    pFoundPos3 = i;
-                    minDot3 = dot;
-                }
-            }
-        }
-
-        if(pFoundPos3 < 0)
-        {
-            throw "Unable to create hull. Please check if your point coordinates make this operation valid.";
-        }
-
-        std::cout << "EXITED FOR LOOP, found position is " << pFoundPos3 << std::endl;
-        Face selectedFace = Face(*edge->start, *edge->end, *sortedPoints[pFoundPos3]);
-        std::cout << "selectedFace\t" << selectedFace.toString() << std::endl;
+        std::cout << "edge\t\t" << edge->start->toString() << edge->end->toString() << std::endl;
+        Face selectedFace = wrapASide(sortedPoints, *edge);
         
         hull.push_back(selectedFace);
-
+        std::cout << "hull updated\t\t" << hull.back().toString() << std::endl;
         edge->setFccw(hull.back());
 
         Wedge e2 = Wedge(*selectedFace[1], *selectedFace[2]);
@@ -189,14 +230,14 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
         {
             edges.push_back(e2);
             edges.back().setFcw(hull.back());
-            freeEdges.push_back(&edges.back());
+            // freeEdges.push_back(&edges.back());
         }
 
         if(isE3New)
         {
             edges.push_back(e3);
             edges.back().setFcw(hull.back());
-            freeEdges.push_back(&edges.back());
+            // freeEdges.push_back(&edges.back());
         }
     }
 

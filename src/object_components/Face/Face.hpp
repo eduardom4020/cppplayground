@@ -14,9 +14,11 @@ class Face : public Triangle
 
         Face(Point& p1, Point&p2, Point& p3);
 
-        Point* getLeastPoint(Point& start, Point& end);
+        Point* getLeastPoint(Point* start, Point* end);
 
         std::string toString();
+
+        Face toCW();
 
     private:
         Vector crossRes;

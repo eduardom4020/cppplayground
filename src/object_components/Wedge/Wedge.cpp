@@ -12,13 +12,13 @@ Wedge::Wedge(Point& _start, Point& _end, Face& ccwFace, Face& cwFace) : Line(_st
 
 void Wedge::setFccw(Face& ccwFace)
 {
-    Point* leastCcwPoint = ccwFace.getLeastPoint(*start, *end);
-    Face ccwFaceCandidate = Face(*start, *end, *leastCcwPoint);
-
-    if(!ccwFaceCandidate.isCCW())
-    {
-        throw "ccwFace is not correct";
-    }
+    // Point* leastCcwPoint = ccwFace.getLeastPoint(start, end);
+    // Face ccwFaceCandidate = Face(*start, *end, *leastCcwPoint);
+    // std::cout << "ccwFaceCandidate\t\t" << ccwFaceCandidate.toString() << std::endl;
+    // if(!ccwFaceCandidate.isCCW())
+    // {
+    //     throw "ccwFace is not correct";
+    // }
 
     Fccw = &ccwFace;
 }
@@ -30,13 +30,13 @@ Face* Wedge::getFccw()
 
 void Wedge::setFcw(Face& cwFace)
 {
-    Point* leastCwPoint = cwFace.getLeastPoint(*start, *end);
-    Face cwFaceCandidate = Face(*start, *end, *leastCwPoint);
-
-    if(cwFaceCandidate.isCCW())
-    {
-        throw "cwFace is not correct";
-    }
+    // Point* leastCwPoint = cwFace.getLeastPoint(start, end);
+    // Face cwFaceCandidate = Face(*start, *end, *leastCwPoint);
+    
+    // if(cwFaceCandidate.isCCW())
+    // {
+    //     throw "cwFace is not correct";
+    // }
 
     Fcw = &cwFace;
 }
@@ -48,8 +48,8 @@ Face* Wedge::getFcw()
 
 std::string Wedge::toTerminal()
 {
-    Point* leastCcwPoint = Fccw->getLeastPoint(*start, *end);
-    Point* leastCwPoint = Fcw->getLeastPoint(*start, *end);
+    Point* leastCcwPoint = Fccw->getLeastPoint(start, end);
+    Point* leastCwPoint = Fcw->getLeastPoint(start, end);
 
     std::string out = "\t\t\t    ";
     out.append(end->toString());

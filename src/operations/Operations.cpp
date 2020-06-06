@@ -93,9 +93,9 @@ std::vector<Point *> op::sortPoints(std::vector<Point *> points, bool desc)
     auto pointComparison = [&desc](Point* p1, Point* p2)
     {
         bool p1_rt_p2 = (
-            ( p1->x > p2->x ) || 
-            ( p1->x == p2->x && p1->y > p2->y ) || 
-            ( p1->x == p2->x && p1->y == p2->y && p1->z >= p2->z )
+            ( p1->y > p2->y ) || 
+            ( p1->y == p2->y && p1->x > p2->x ) || 
+            ( p1->y == p2->y && p1->x == p2->x && p1->z >= p2->z )
         );
         return desc && p1_rt_p2;
     };

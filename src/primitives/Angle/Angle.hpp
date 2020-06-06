@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "../../operations/Operations.hpp"
+#include "../Vector/Vector.hpp"
+#include "../Normal/Normal.hpp"
 
 class Angle
 {    
