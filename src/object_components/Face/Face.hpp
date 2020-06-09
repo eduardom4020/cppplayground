@@ -20,6 +20,8 @@ class Face : public Triangle
 
         Face toCW();
 
+        bool isCW();
+
     private:
         Vector crossRes;
 };

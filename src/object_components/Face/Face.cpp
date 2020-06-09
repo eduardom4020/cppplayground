@@ -38,10 +38,23 @@ std::string Face::toString()
 
 Face Face::toCW()
 {
-    if(this->isCCW())
+    if(!this->isCW())
     {
-        return Face(*points[0], *points[2], *points[1]);
+        return Face(*points[1], *points[0], *points[2]);
     }
 
     return Face(*points[0], *points[1], *points[2]);
+}
+
+bool Face::isCW()
+{
+    Vector crossXY = op::cross(Vector(*points[0]), Vector(*points[1]));
+    Vector crossYZ = op::cross(Vector(*points[1]), Vector(*points[2]));
+    Vector crossZX = op::cross(Vector(*points[2]), Vector(*points[0]));
+
+    Vector S = op::sum( op::sum(crossXY, crossYZ), crossZX );
+
+    double dot = op::dot(S, normal);
+    std::cout << "dot\t" << dot << std::endl;
+    return dot > 0;
 }

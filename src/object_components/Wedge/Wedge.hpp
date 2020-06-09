@@ -25,6 +25,7 @@ class Wedge : public Line
         Face* getFcw();
 
         std::string toTerminal();
+        std::string toString();
 
         bool operator==(Wedge& edge);
 
