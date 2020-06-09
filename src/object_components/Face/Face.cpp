@@ -58,3 +58,10 @@ bool Face::isCW()
     std::cout << "dot\t" << dot << std::endl;
     return dot > 0;
 }
+
+bool Face::operator==(Face& face)
+{
+    return ( points[0] == face.points[0] || points[0] == face.points[1] || points[0] == face.points[2] )
+        && ( points[1] == face.points[0] || points[1] == face.points[1] || points[1] == face.points[2] )
+        && ( points[2] == face.points[0] || points[2] == face.points[1] || points[2] == face.points[2] );
+}

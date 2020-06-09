@@ -22,6 +22,8 @@ class Face : public Triangle
 
         bool isCW();
 
+        bool operator==(Face& face);
+
     private:
         Vector crossRes;
 };

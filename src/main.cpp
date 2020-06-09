@@ -26,6 +26,7 @@ int main(int argc, char const *argv[])
     {
       std::cout << face.toString() << std::endl;
     }
+    std::cout << "Hull size " << hull.size() << std::endl;
   }
   catch(char const* exception)
   {
