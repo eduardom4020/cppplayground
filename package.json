@@ -1,0 +1,22 @@
+{
+  "name": "computational-geometry-2020",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "http-server -c-1 -p 5000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardom4020/geometric-modeling-2020.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eduardom4020/geometric-modeling-2020/issues"
+  },
+  "homepage": "https://github.com/eduardom4020/geometric-modeling-2020#readme",
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "three": "^0.117.1"
+  }
+}
