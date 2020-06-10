@@ -30,6 +30,10 @@ var camera, scene, renderer, controls;
 var geometries = [];
 var materials = [];
 var meshes = [];
+
+window.meshes = meshes;
+window.materials = materials;
+window.geometries = geometries;
  
 init();
 animate();
@@ -71,7 +75,7 @@ function init() {
 
         materials.push( new THREE.MeshBasicMaterial( { color: 0x787878 } ) );
     
-        meshes.push( new THREE.Mesh( geometries[geometries.length - 1], materials[materials.length - 1] ) );
+        meshes.push( new THREE.Mesh( geometries[geometries.length - 1], materials ) );
 
         scene.add( meshes[meshes.length - 1] );
     })));
