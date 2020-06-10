@@ -77,7 +77,7 @@ int main(int argc, char const *argv[])
       convexHullExport << "p " << point->x << " " << point->y << " " << point->z << "\n";
     }
 
-    convexHullExport << "h 1" << "\n";
+    convexHullExport << "hull" << "\n";
     for(auto& face : hull)
     {
       int p1Index = -1;
