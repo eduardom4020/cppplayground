@@ -55,7 +55,7 @@ bool Face::isCW()
     Vector S = op::sum( op::sum(crossXY, crossYZ), crossZX );
 
     double dot = op::dot(S, normal);
-    std::cout << "dot\t" << dot << std::endl;
+    
     return dot > 0;
 }
 

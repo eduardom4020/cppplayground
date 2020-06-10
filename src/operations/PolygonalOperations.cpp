@@ -126,8 +126,6 @@ Face wrapASide(std::vector<Point *>& sortedPoints, Wedge& edge)
     // Vector normalProjXY = Vector(face->normal.x, face->normal.y, 0);
     // Vector normalProjXZ = Vector(face->normal.x, 0, face->normal.z);
 
-    std::cout << "\n\nRotating face " << face->toString() << " using edge " << edge.toString() << std::endl;
-
     for (int i=0; i < sortedPoints.size(); i++)
     {
         if(sortedPoints[i] != edge.start && sortedPoints[i] != edge.end) 
@@ -163,7 +161,6 @@ int findEdgeIndex(std::vector<Wedge>& edges, Wedge& edge)
 {
     for(int i=0; i < edges.size(); i++)
     {
-        // std::cout << "edges[i] == edge " << "e[ " << edges[i].start->toString() << ", " << edges[i].end->toString() << " ] " << "e[ " << edge.start->toString() << ", " << edge.end->toString() << " ] " << (edges[i] == edge ? "true" : "false") << std::endl;
         if(edges[i] == edge)
         {
             return i;
@@ -190,10 +187,6 @@ int findFreeEdgeIndex(std::vector<Wedge *>& freeEdges, Wedge& edge)
 {
     for(int i=0; i < freeEdges.size(); i++)
     {
-        // std::cout << "Edge comparison" << std::endl;
-        // std::cout << "*freeEdges[i]" << freeEdges[i]->start->toString() << " " << freeEdges[i]->end->toString() << std::endl;
-        // std::cout << "edge" << edge.start->toString() << " " << edge.end->toString() << std::endl;
-        // std::cout << "*freeEdges[i] == edge " << (*freeEdges[i] == edge ? "true" : "false") << std::endl;
         if(*freeEdges[i] == edge)
         {
             return i;
@@ -205,16 +198,13 @@ int findFreeEdgeIndex(std::vector<Wedge *>& freeEdges, Wedge& edge)
 
 bool isEdgeNew(std::vector<Wedge>& edges, Wedge& edge)
 {
-    // std::cout << "Finding index process " << std::endl;
     int index = findEdgeIndex(edges, edge);
-    // std::cout << "Edge index " << index << std::endl;
     return index == -1;
 }
 
 bool isFreeEdgeNew(std::vector<Wedge *>& freeEdges, Wedge& edge)
 {
     int index = findFreeEdgeIndex(freeEdges, edge);
-    // std::cout << "Free Edge index " << index << std::endl;
     return index == -1;
 }
 
@@ -226,8 +216,6 @@ bool isFaceNew(std::vector<Face>& hull, Face& face)
 
 std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
 {
-    std::cout << "op::giftWrap3D DEBUG" << std::endl;
-
     std::vector<Point *> sortedPoints = op::sortPoints(points);
     
     // Euler formula
@@ -263,18 +251,8 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
         {
             edge = freeEdges.back();
             freeEdges.pop_back();
-            // std::cout << "hi" << std::endl;
         }
         while(edge->getFccw() != nullptr);
-        
-        // std::cout << "edge\t\t" << std::endl;
-        // std::cout << edge->start->toString() << "\t" << edge->end->toString() << std::endl;
-
-        // std::cout << "freeEdges\t\t" << std::endl;
-        // for(auto* someEdge : freeEdges)
-        // {
-        //     std::cout << someEdge->start->toString() << "\t" << someEdge->end->toString() << std::endl;
-        // }
 
         Face selectedFace = wrapASide(sortedPoints, *edge);
 

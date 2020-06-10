@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <map>
 
 #include "./operations/PolygonalOperations.hpp"
@@ -7,7 +8,7 @@
 
 int main(int argc, char const *argv[])
 {
-  std::cout << "3D Hull Test" << std::endl;
+  std::cout << "3D Hull Builder" << std::endl;
 
   Point p0 = Point(0, 0, 0);
   Point p1 = Point(-1, 0, 0);
@@ -21,12 +22,52 @@ int main(int argc, char const *argv[])
 
   try
   {
+    std::ofstream convexHull;
+    convexHull.open ("convex-hull.obj");
+
     std::vector<Face> hull = op::giftWrap3D(pointsCloud);
+
+    for(auto* point : pointsCloud)
+    {
+      convexHull << "v " << point->x << " " << point->y << " " << point->z << "\n";
+    }
+
     for(auto& face : hull)
     {
-      std::cout << face.toString() << std::endl;
+      convexHull << "vn " << face.normal.x << " " << face.normal.y << " " << face.normal.z << "\n";
+    }
+
+    for(int j=0; j < hull.size(); j++)
+    {
+      int p1Index = -1;
+      int p2Index = -1;
+      int p3Index = -1;
+
+      for(int i=0; i < pointsCloud.size(); i++)
+      {
+        if(pointsCloud[i] == hull[j].points[0])
+        {
+          p1Index = i + 1;
+        }
+
+        if(pointsCloud[i] == hull[j].points[1])
+        {
+          p2Index = i + 1;
+        }
+
+        if(pointsCloud[i] == hull[j].points[2])
+        {
+          p3Index = i + 1;
+        }
+      }
+
+      if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
+      {
+        convexHull << "f " << p1Index << "//" << j + 1 << " " << p2Index << "//" << j + 1 << " " << p3Index << "//" << j + 1 << "\n";
+      }
     }
     std::cout << "Hull size " << hull.size() << std::endl;
+    convexHull.close();
   }
   catch(char const* exception)
   {
