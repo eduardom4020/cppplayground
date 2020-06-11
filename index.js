@@ -11,9 +11,9 @@ var pointsCloud = sceneData
 
 var hulls = sceneData
     .then(lines => {
-        var hullsFacesFlat = lines.filter(line => (line.trim() === 'hull' || line[0] == 'f'));
+        var hullsFacesFlat = lines.filter(line => (line.split(' ')[0].trim() === 'hull' || line[0] == 'f'));
         var hullsFaces = hullsFacesFlat.reduce((acc, curr) => {
-            if(curr.trim() === 'hull') {
+            if(curr.split(' ')[0].trim() === 'hull') {
                 return [...acc, []];
             } else {
                 let currHulls = [...acc];
@@ -25,6 +25,13 @@ var hulls = sceneData
         return hullsFaces;
     })
     .then(hullsDescription => hullsDescription.map(faces => faces.map(face => ({ p1: Number(face[1]) - 1, p2: Number(face[2]) - 1, p3: Number(face[3]) - 1 }))));
+
+var hullsColors = sceneData
+    .then(lines => {
+        var hullsData = lines.filter(line => (line.split(' ')[0].trim() === 'hull'));
+        var hullsColors = hullsData.map(hull => hull.slice(hull.indexOf('color') + 6).split(' ')[0])
+        return hullsColors;
+    });
 
 var camera, scene, renderer, controls;
 var geometries = [];
@@ -43,7 +50,7 @@ function init() {
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
-    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
+    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
     controls = new OrbitControls( camera, renderer.domElement );
 
     camera.position.z = 5;
@@ -65,7 +72,7 @@ function init() {
         var dot = new THREE.Points( dotGeometry, dotMaterial );
         scene.add( dot );
         return points
-    }).then(points => hulls.then(hullsFaces => hullsFaces.map(hull => {
+    }).then(points => hullsColors.then(colors => hulls.then(hullsFaces => hullsFaces.map((hull, index) => {
         geometries.push( new THREE.Geometry() );
 
         points.forEach(point => geometries[geometries.length - 1].vertices.push(new THREE.Vector3(point.x, point.y, point.z)));
@@ -73,12 +80,14 @@ function init() {
 
         geometries[geometries.length - 1].computeBoundingSphere();
 
-        materials.push( new THREE.MeshBasicMaterial( { color: 0x787878 } ) );
+        console.log(colors[index])
+        materials.push( new THREE.MeshBasicMaterial( { color: parseInt(colors[index].replace('#', '0x')) } ) );
     
-        meshes.push( new THREE.Mesh( geometries[geometries.length - 1], materials ) );
+        meshes.push( new THREE.Mesh( geometries[geometries.length - 1], materials[materials.length - 1] ) );
 
         scene.add( meshes[meshes.length - 1] );
-    })));
+
+    }))));
 }
  
 function animate() {
