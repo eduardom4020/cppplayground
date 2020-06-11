@@ -94,9 +94,9 @@ int main(int argc, char const *argv[])
   Point p7Tree1 = Point( 1.054163, 0.699503, -0.177876);
   Point p8Tree1 = Point( 0.889971, 0.699503, -0.693358);
   Point p9Tree1 = Point( 1.229808, 0.699503, -0.517713);
-  //lembrar que falta um ponto aqui
+  Point p10Tree1 = Point( 1.229808, 0.220221, -0.517713);
 
-  std::vector<Point *> pointsCloudTree1 = { &p1Tree1, &p2Tree1, &p3Tree1, &p4Tree1, &p5Tree1, &p6Tree1, &p7Tree1, &p8Tree1, &p9Tree1 };
+  std::vector<Point *> pointsCloudTree1 = { &p1Tree1, &p2Tree1, &p3Tree1, &p4Tree1, &p5Tree1, &p6Tree1, &p7Tree1, &p8Tree1, &p9Tree1, &p10Tree1 };
 
   Point p1Tree2 = Point( 1.229808, 0.699503, -0.517713);
   Point p2Tree2 = Point( 1.350316, 1.178786, -0.750871);
@@ -124,17 +124,14 @@ int main(int argc, char const *argv[])
 
   std::vector<Point *> pointsCloudTree3 = { &p1Tree3, &p2Tree3, &p3Tree3, &p4Tree3, &p5Tree3, &p6Tree3, &p7Tree3, &p8Tree3, &p9Tree3, &p10Tree3 };
 
-  Point p1Tree4 = Point( 1.240041, 2.137352, -0.537513);
-  Point p2Tree4 = Point( 1.249607, 2.137352, -0.507480);
-  Point p3Tree4 = Point( 1.219574, 2.137352, -0.497913);
-  Point p4Tree4 = Point( 1.210008, 2.137352, -0.527947);
+  Point p1Tree4 = Point( 1.317984, 1.618069, -0.688315);
+  Point p2Tree4 = Point( 1.400410, 1.628069, -0.429537);
+  Point p3Tree4 = Point( 1.141632, 1.638069, -0.347111);
+  Point p4Tree4 = Point( 1.059206, 1.648069, -0.605889);
   Point p5Tree4 = Point( 1.229808, 1.658069, -0.517713);
-  Point p6Tree4 = Point( 1.317984, 1.658069, -0.688315);
-  Point p7Tree4 = Point( 1.400410, 1.658069, -0.429537);
-  Point p8Tree4 = Point( 1.141632, 1.658069, -0.347111);
-  Point p9Tree4 = Point( 1.059206, 1.658069, -0.605889);
+  Point p6Tree4 = Point( 1.229808, 2.201551, -0.517713);
 
-  std::vector<Point *> pointsCloudTree4 = { &p1Tree4, &p2Tree4, &p3Tree4, &p4Tree4, &p5Tree4, &p6Tree4, &p7Tree4, &p8Tree4, &p9Tree4 };
+  std::vector<Point *> pointsCloudTree4 = { &p1Tree4, &p2Tree4, &p3Tree4, &p4Tree4, &p5Tree4, &p6Tree4 };
 
   try
   {
@@ -145,10 +142,10 @@ int main(int argc, char const *argv[])
     std::vector<Face> hullGround1 = op::giftWrap3D(pointsCloudGround1);
     std::vector<Face> hullGround2 = op::giftWrap3D(pointsCloudGround2);
 
-    // std::vector<Face> hullTree1 = op::giftWrap3D(pointsCloudTree1);
+    std::vector<Face> hullTree1 = op::giftWrap3D(pointsCloudTree1);
     std::vector<Face> hullTree2 = op::giftWrap3D(pointsCloudTree2);
     std::vector<Face> hullTree3 = op::giftWrap3D(pointsCloudTree3);
-    // std::vector<Face> hullTree4 = op::giftWrap3D(pointsCloudTree4);
+    std::vector<Face> hullTree4 = op::giftWrap3D(pointsCloudTree4);
 
     // for(auto* point : pointsCloudGrass)
     // {
