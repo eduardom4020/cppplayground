@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "prestart": "sh prestart.sh",
     "start": "http-server -c-1 -p 5000"
   },
   "repository": {

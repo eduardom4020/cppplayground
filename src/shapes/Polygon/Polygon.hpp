@@ -12,7 +12,7 @@ class Polygon
         std::vector<Point *> points;
 
         double area();
-        //TODO: Correct this, it is crashing because giftWrap deppends on it
+        
         bool isCCW();
 
     private:

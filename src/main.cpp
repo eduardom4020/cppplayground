@@ -6,8 +6,6 @@
 #include "./object_components/Face/Face.hpp"
 #include "./object_components/Wedge/Wedge.hpp"
 
-
-
 int main(int argc, char const *argv[])
 {
   std::cout << "3D Hull Builder" << std::endl;
@@ -50,7 +48,16 @@ int main(int argc, char const *argv[])
   Point p36Grass = Point(-2.126613, 0.251579, -1.506633);
   Point p37Grass = Point(0.812278, 0.251579, -2.461552);
 
-  std::vector<Point *> pointsCloudGrass = { &p1Grass, &p2Grass, &p3Grass, &p4Grass, &p5Grass, &p6Grass, &p7Grass, &p8Grass, &p9Grass, &p10Grass, &p11Grass, &p12Grass, &p13Grass, &p14Grass, &p15Grass, &p16Grass, &p17Grass, &p18Grass, &p19Grass, &p20Grass, &p21Grass, &p22Grass, &p23Grass, &p24Grass, &p25Grass, &p26Grass, &p27Grass, &p28Grass, &p29Grass, &p30Grass, &p31Grass, &p32Grass, &p33Grass, &p34Grass, &p35Grass, &p36Grass, &p37Grass };
+  Point p38Grass = Point(1.5, -0.6, 0.5);
+  Point p39Grass = Point(2, -0.5, -0.3);
+  Point p40Grass = Point(2.5, -0.4, -0.8);
+  Point p41Grass = Point(2.5, -0.3, 0.25);
+  Point p42Grass = Point(-2.1, -0.12, 0.15);
+  Point p43Grass = Point(1.8, 0.2, 0.3);
+  Point p44Grass = Point(0.8, 0.25, -0.3);
+  Point p45Grass = Point(-0.8, 0.25, -0.3);
+
+  std::vector<Point *> pointsCloudGrass = { &p1Grass, &p2Grass, &p3Grass, &p4Grass, &p5Grass, &p6Grass, &p7Grass, &p8Grass, &p9Grass, &p10Grass, &p11Grass, &p12Grass, &p13Grass, &p14Grass, &p15Grass, &p16Grass, &p17Grass, &p18Grass, &p19Grass, &p20Grass, &p21Grass, &p22Grass, &p23Grass, &p24Grass, &p25Grass, &p26Grass, &p27Grass, &p28Grass, &p29Grass, &p30Grass, &p31Grass, &p32Grass, &p33Grass, &p34Grass, &p35Grass, &p36Grass, &p37Grass, &p38Grass, &p39Grass, &p40Grass, &p41Grass, &p42Grass, &p43Grass, &p44Grass, &p45Grass };
 
   Point p1Ground1 = Point( 3.618037, -0.811649, 2.667051);
   Point p2Ground1 = Point( -1.381940, -0.811650, 4.291671);
@@ -148,90 +155,8 @@ int main(int argc, char const *argv[])
   Point p11WellSide1 = Point( -0.674921, 0.194623, -0.737902);
   Point p12WellSide1 = Point( -0.674921, 0.869623, -0.737902);
 
-  // std::vector<Point *> pointsCloudWellSide1 = { &p1WellSide1, &p2WellSide1, &p3WellSide1, &p4WellSide1, &p5WellSide1, &p6WellSide1, &p7WellSide1, &p8WellSide1, &p9WellSide1, &p10WellSide1, &p11WellSide1, &p12WellSide1 };
-
-  // Point p1WellSide1Up = Point( -1.220517, 0.869623, -1.022902);
-  // Point p2WellSide1Up = Point( -1.220517, 0.869623, -1.622902);
-  // Point p3WellSide1Up = Point( -1.272478, 1.094622, -0.992902);
-  // Point p4WellSide1Up = Point( -1.272478, 1.094622, -1.652902);
-  // Point p5WellSide1Up = Point( -1.272478, 0.869623, -0.992902);
-  // Point p6WellSide1Up = Point( -1.272478, 0.869623, -1.652902);
-  // Point p7WellSide1Up = Point( -1.189750, 1.094622, -1.040665);
-  // Point p8WellSide1Up = Point( -1.189750, 1.094622, -1.605139);
-  // Point p9WellSide1Up = Point( -1.220517, 1.094622, -1.052902);
-  // Point p10WellSide1Up = Point( -1.220517, 0.869623, -1.052902);
-  // Point p11WellSide1Up = Point( -1.272478, 1.094622, -1.025902);
-  // Point p12WellSide1Up = Point( -1.272478, 0.869623, -1.025902);
-  // Point p13WellSide1Up = Point( -1.189750, 1.094622, -1.068889);
-  // Point p14WellSide1Up = Point( -1.194536, 1.094622, -1.007902);
-  // Point p15WellSide1Up = Point( -1.194536, 0.869623, -1.007902);
-  // Point p16WellSide1Up = Point( -1.243899, 1.094622, -0.976402);
-  // Point p17WellSide1Up = Point( -1.243899, 0.869623, -0.976402);
-  // Point p18WellSide1Up = Point( -1.165307, 1.094622, -1.026554);
-  // Point p19WellSide1Up = Point( -1.220517, 0.869623, -1.594402);
-  // Point p20WellSide1Up = Point( -1.272478, 0.869623, -1.621552);
-  // Point p21WellSide1Up = Point( -1.220517, 1.094622, -1.594402);
-  // Point p22WellSide1Up = Point( -1.272478, 1.094622, -1.621552);
-  // Point p23WellSide1Up = Point( -1.189750, 1.094622, -1.578326);
-  // Point p24WellSide1Up = Point( -1.194536, 1.094622, -1.637902);
-  // Point p25WellSide1Up = Point( -1.194536, 0.869623, -1.637902);
-  // Point p26WellSide1Up = Point( -1.243899, 1.094622, -1.669402);
-  // Point p27WellSide1Up = Point( -1.243899, 0.869623, -1.669402);
-  // Point p28WellSide1Up = Point( -1.165307, 1.094622, -1.619250);
-
-  // std::vector<Point *> pointsCloudWellSide1Up = { &p1WellSide1Up, &p2WellSide1Up, &p3WellSide1Up, &p4WellSide1Up, &p5WellSide1Up, &p6WellSide1Up, &p7WellSide1Up, &p8WellSide1Up, &p9WellSide1Up, &p10WellSide1Up, &p11WellSide1Up, &p12WellSide1Up, &p13WellSide1Up, &p14WellSide1Up, &p15WellSide1Up, &p16WellSide1Up, &p17WellSide1Up, &p18WellSide1Up, &p19WellSide1Up, &p20WellSide1Up, &p21WellSide1Up, &p22WellSide1Up, &p23WellSide1Up, &p24WellSide1Up, &p25WellSide1Up, &p26WellSide1Up, &p27WellSide1Up, &p28WellSide1Up };
-  
-  // Point p1WellSide2 = Point( -0.181286, 0.194623, -1.022902);
-  // Point p2WellSide2 = Point( -0.700901, 0.194623, -0.722902);
-  // Point p3WellSide2 = Point( -0.181286, 0.869621, -1.022902);
-  // Point p4WellSide2 = Point( -0.700901, 0.869622, -0.722902);
-  // Point p5WellSide2 = Point( -0.725583, 0.194623, -0.737152);
-  // Point p6WellSide2 = Point( -0.725583, 0.869623, -0.737152);
-  // Point p7WellSide2 = Point( -0.674921, 0.194623, -0.737902);
-  // Point p8WellSide2 = Point( -0.674921, 0.869624, -0.737902);
-  // Point p9WellSide2 = Point( -0.205968, 0.194623, -1.008652);
-  // Point p10WellSide2 = Point( -0.205968, 0.869623, -1.008652);
-  // Point p11WellSide2 = Point( -0.181286, 0.194623, -1.052902);
-  // Point p12WellSide2 = Point( -0.181286, 0.869626, -1.052902);
-
-  // std::vector<Point *> pointsCloudWellSide2 = { &p1WellSide2, &p2WellSide2, &p3WellSide2, &p4WellSide2, &p5WellSide2, &p6WellSide2, &p7WellSide2, &p8WellSide2, &p9WellSide2, &p10WellSide2, &p11WellSide2, &p12WellSide2 };
-
-  // Point p1WellSide2Up = Point( -0.700901, 0.869621, -0.722902);
-  // Point p2WellSide2Up = Point( -1.220517, 0.869622, -1.022902);
-  // Point p3WellSide2Up = Point( -0.700901, 1.094622, -0.662902);
-  // Point p4WellSide2Up = Point( -1.272478, 1.094622, -0.992902);
-  // Point p5WellSide2Up = Point( -0.700901, 0.869623, -0.662902);
-  // Point p6WellSide2Up = Point( -1.272478, 0.869623, -0.992902);
-  // Point p7WellSide2Up = Point( -0.700901, 1.094622, -0.758429);
-  // Point p8WellSide2Up = Point( -1.189750, 1.094622, -1.040665);
-  // Point p9WellSide2Up = Point( -1.220517, 1.094622, -1.052902);
-  // Point p10WellSide2Up = Point( -1.220517, 0.869623, -1.052902);
-  // Point p11WellSide2Up = Point( -1.272478, 1.094622, -1.025902);
-  // Point p12WellSide2Up = Point( -1.272478, 0.869625, -1.025902);
-  // Point p13WellSide2Up = Point( -1.189750, 1.094622, -1.068889);
-  // Point p14WellSide2Up = Point( -1.194536, 1.094622, -1.007902);
-  // Point p15WellSide2Up = Point( -1.194536, 0.869626, -1.007902);
-  // Point p16WellSide2Up = Point( -1.243899, 1.094622, -0.976402);
-  // Point p17WellSide2Up = Point( -1.243899, 0.869623, -0.976402);
-  // Point p18WellSide2Up = Point( -1.165307, 1.094622, -1.026554);
-  // Point p19WellSide2Up = Point( -0.725583, 1.094622, -0.737152);
-  // Point p20WellSide2Up = Point( -0.728051, 1.094622, -0.678577);
-  // Point p21WellSide2Up = Point( -0.724122, 1.094622, -0.771835);
-  // Point p22WellSide2Up = Point( -0.725583, 0.869623, -0.737152);
-  // Point p23WellSide2Up = Point( -0.728051, 0.869623, -0.678577);
-  // Point p24WellSide2Up = Point( -0.674921, 1.094622, -0.737902);
-  // Point p25WellSide2Up = Point( -0.674921, 0.869623, -0.737902);
-  // Point p26WellSide2Up = Point( -0.672323, 1.094622, -0.679402);
-  // Point p27WellSide2Up = Point( -0.672323, 0.869623, -0.679402);
-  // Point p28WellSide2Up = Point( -0.676459, 1.094622, -0.772541);
-
-  // std::vector<Point *> pointsCloudWellSide2Up = { &p1WellSide2Up, &p2WellSide2Up, &p3WellSide2Up, &p4WellSide2Up, &p5WellSide2Up, &p6WellSide2Up, &p7WellSide2Up, &p8WellSide2Up, &p9WellSide2Up, &p10WellSide2Up, &p11WellSide2Up, &p12WellSide2Up, &p13WellSide2Up, &p14WellSide2Up, &p15WellSide2Up, &p16WellSide2Up, &p17WellSide2Up, &p18WellSide2Up, &p19WellSide2Up, &p20WellSide2Up, &p21WellSide2Up, &p22WellSide2Up, &p23WellSide2Up, &p24WellSide2Up, &p25WellSide2Up, &p26WellSide2Up, &p27WellSide2Up, &p28WellSide2Up };
-
   try
   {
-    // std::ofstream convexHull;
-    // convexHull.open ("convex-hull.obj");
-
     std::vector<Face> hullGrass = op::giftWrap3D(pointsCloudGrass);
     std::vector<Face> hullGround1 = op::giftWrap3D(pointsCloudGround1);
     std::vector<Face> hullGround2 = op::giftWrap3D(pointsCloudGround2);
@@ -240,77 +165,6 @@ int main(int argc, char const *argv[])
     std::vector<Face> hullTree2 = op::giftWrap3D(pointsCloudTree2);
     std::vector<Face> hullTree3 = op::giftWrap3D(pointsCloudTree3);
     std::vector<Face> hullTree4 = op::giftWrap3D(pointsCloudTree4);
-
-    // std::vector<Face> hullWellSide1 = op::giftWrap3D(pointsCloudWellSide1);
-    // std::vector<Face> hullWellSide1Up = op::giftWrap3D(pointsCloudWellSide1Up);
-    // std::vector<Face> hullWellSide2 = op::giftWrap3D(pointsCloudWellSide2);
-    // std::vector<Face> hullWellSide2Up = op::giftWrap3D(pointsCloudWellSide2Up);
-
-    // for(auto* point : pointsCloudGrass)
-    // {
-    //   convexHull << "v " << point->x << " " << point->y << " " << point->z << "\n";
-    // }
-    // for(auto* point : pointsCloudGround1)
-    // {
-    //   convexHull << "v " << point->x << " " << point->y << " " << point->z << "\n";
-    // }
-    // for(auto* point : pointsCloudGround2)
-    // {
-    //   convexHull << "v " << point->x << " " << point->y << " " << point->z << "\n";
-    // }
-    // for(auto* point : pointsCloudTree1)
-    // {
-    //   convexHull << "v " << point->x << " " << point->y << " " << point->z << "\n";
-    // }
-    // for(auto* point : pointsCloudTree2)
-    // {
-    //   convexHull << "v " << point->x << " " << point->y << " " << point->z << "\n";
-    // }
-    // for(auto* point : pointsCloudTree3)
-    // {
-    //   convexHull << "v " << point->x << " " << point->y << " " << point->z << "\n";
-    // }
-    // for(auto* point : pointsCloudTree4)
-    // {
-    //   convexHull << "v " << point->x << " " << point->y << " " << point->z << "\n";
-    // }
-
-    // for(auto& face : hull)
-    // {
-    //   convexHull << "vn " << face.normal.x << " " << face.normal.y << " " << face.normal.z << "\n";
-    // }
-
-    // for(int j=0; j < hull.size(); j++)
-    // {
-    //   int p1Index = -1;
-    //   int p2Index = -1;
-    //   int p3Index = -1;
-
-    //   for(int i=0; i < pointsCloudGrass.size(); i++)
-    //   {
-    //     if(pointsCloudGrass[i] == hull[j].points[0])
-    //     {
-    //       p1Index = i + 1;
-    //     }
-
-    //     if(pointsCloudGrass[i] == hull[j].points[1])
-    //     {
-    //       p2Index = i + 1;
-    //     }
-
-    //     if(pointsCloudGrass[i] == hull[j].points[2])
-    //     {
-    //       p3Index = i + 1;
-    //     }
-    //   }
-
-    //   if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
-    //   {
-    //     convexHull << "f " << p1Index << "//" << j + 1 << " " << p2Index << "//" << j + 1 << " " << p3Index << "//" << j + 1 << "\n";
-    //   }
-    // }
-    // std::cout << "Hull size " << hull.size() << std::endl;
-    // convexHull.close();
 
     std::ofstream convexHullExport;
     convexHullExport.open ("convex-hull.hull");

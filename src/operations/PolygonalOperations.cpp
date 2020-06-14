@@ -123,20 +123,12 @@ Face wrapASide(std::vector<Point *>& sortedPoints, Wedge& edge)
 
     Face* face = edge.getFcw();
 
-    // Vector normalProjXY = Vector(face->normal.x, face->normal.y, 0);
-    // Vector normalProjXZ = Vector(face->normal.x, 0, face->normal.z);
-
     for (int i=0; i < sortedPoints.size(); i++)
     {
         if(sortedPoints[i] != edge.start && sortedPoints[i] != edge.end) 
         {
             Face fCandidate = Face(*edge.end, *edge.start, *sortedPoints[i]);
-            // std::cout << "fCandidate " << i << fCandidate.toString() << std::endl;
-
-            // Vector candidateNormalProjXY = Vector(fCandidate.normal.x, fCandidate.normal.y, 0);
-            // Vector candidateNormalProjXZ = Vector(fCandidate.normal.x, 0, fCandidate.normal.z);
-
-            // double angularValue = 1 - op::dot(normalProjXY, candidateNormalProjXY) + 1 - op::dot(normalProjXZ, candidateNormalProjXZ);
+            
             double angularValue = 1 - op::dot(face->normal, fCandidate.normal);
 
             if(angularValue < minAngularValue)
@@ -269,46 +261,26 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
             Wedge E3 = Wedge(*hull.back()[2], *hull.back()[0], hull.back());
             
             bool IsE1New = isEdgeNew(edges, E1);
-            // bool IsE1Free = isFreeEdgeNew(freeEdges, E1);
-
             bool IsE2New = isEdgeNew(edges, E2);
-            // bool IsE2Free = isFreeEdgeNew(freeEdges, E2);
-
             bool IsE3New = isEdgeNew(edges, E3);
-            // bool IsE3Free = isFreeEdgeNew(freeEdges, E3);
 
             if(IsE1New)
             {
                 edges.push_back(E1);
                 freeEdges.push_back(&edges.back());
             }
-            // else if(IsE1Free)
-            // {
-            //     int index = findEdgeIndex(edges, E1);
-            //     freeEdges.push_back(&edges[index]);
-            // }
-            // std::cout << "2\t\t" << std::endl;
+            
             if(IsE2New)
             {
                 edges.push_back(E2);
                 freeEdges.push_back(&edges.back());
             }
-            // else if(IsE2Free)
-            // {
-            //     int index = findEdgeIndex(edges, E2);
-            //     freeEdges.push_back(&edges[index]);
-            // }
-            // std::cout << "3\t\t" << std::endl;
+            
             if(IsE3New)
             {
                 edges.push_back(E3);
                 freeEdges.push_back(&edges.back());
             }
-            // else if(IsE3Free)
-            // {
-            //     int index = findEdgeIndex(edges, E3);
-            //     freeEdges.push_back(&edges[index]);
-            // }
         }
     }
     

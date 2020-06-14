@@ -47,4 +47,4 @@ wedge.o: operations.o
 	g++ -std=c++1y -o ../build/compiled/wedge.o -c ./object_components/Wedge/Wedge.cpp
 
 clean:
-	rm -rf *.o *~ geo_mod
+	rm -rf ../build/compiled/*.o ../buil/*.bin ../build/*.exe ../build/*.hull ../build/*.obj *~ geo_c

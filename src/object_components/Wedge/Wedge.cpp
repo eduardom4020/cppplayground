@@ -99,7 +99,5 @@ std::string Wedge::toString()
 
 bool Wedge::operator==(Wedge& edge)
 {
-    // std::cout << "start == edge.start " << (start == edge.start ? "true" : "false") << std::endl;
-    // std::cout << "end == edge.end " << (end == edge.end ? "true" : "false") << std::endl;
     return (start == edge.start && end == edge.end) || (start == edge.end && end == edge.start);
 }
