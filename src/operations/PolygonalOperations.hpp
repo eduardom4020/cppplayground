@@ -20,11 +20,16 @@
 namespace op
 {
     bool intersect(Line& l1, Line& l2);
+    bool intersect(Face f1, Face f2);
     std::vector<double> baricentricCoordnates(Point& point, Triangle& triangle);
     bool isInside(Point& point, Triangle& triangle);
 
     std::vector<Face> giftWrap3D(std::vector<Point *> points);
     bool equal(Wedge& e1, Wedge& e2);
+
+    std::vector<Face> frontierAdvance3D(std::vector<Point *> points);
+    double dist(Point point, Face face);
+    bool isVertexOfFace(Point* point, Face face);
 }
 
 #endif

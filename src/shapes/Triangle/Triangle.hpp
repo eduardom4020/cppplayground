@@ -10,6 +10,8 @@ class Triangle : public Polygon
         Triangle(Point& p1, Point&p2, Point& p3);
 
         Point* operator[](int index);
+
+        Point center;
         
     private:
         

@@ -286,3 +286,81 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
     
     return hull;
 }
+
+double op::dist(Point point, Face face)
+{
+    double distance = op::dist(point, face.center);
+    return distance;
+}
+
+bool op::isVertexOfFace(Point* point, Face face)
+{
+    return face[0] == point
+    || face[1] == point
+    || face[2] == point;
+}
+
+struct RankElement {
+    int value;
+    int index;
+}
+
+bool rankingOrderCondition (RankElement a, RankElement b){ return (a.value < b.value); }
+
+std::vector<RankElement> pointsRanking(std::vector<Point *> points, Face face)
+{
+    std::vector<RankElement> ranking = {};
+    ranking.reserve(points.size());
+    
+    for(int i=0; i < points.size(); i++)
+    {
+        if(!op::isVertexOfFace(points[i], face))
+        {
+            RankElement toRank;
+            toRank.value = op::dist(points[i], face);
+            toRank.index = i;
+
+            ranking.push_back(toRank);
+        }
+    }
+
+    return std::sort(ranking.begin(), ranking.end(), rankingOrderCondition);
+}
+
+std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
+{
+    std::vector<Face> hull = op::giftWrap3D(points);
+
+    std::vector<Face> solid = {};
+    solid.reserve(5 * points.size());
+
+    for(auto& face : hull)
+    {
+        solid.push_back(face);
+    }
+
+    std::vector<Point *> internalPoints = {};
+    internalPoints.reserve(points.size());
+
+    // for(int i=0; i < points.size(); i++)
+    // {
+    //     for(auto& face : hull)
+    //     {
+    //         if(!op::isVertexOfFace(points[i], face))
+    //         {
+    //             internalPoints.push_back(points[i]);
+    //         }
+    //     }
+    // }
+
+    while(solid.size() > 0)
+    {
+        Face currFace = solid.back();
+        solid.pop_back();
+
+        std::vector<RankElement> ranking = pointsRanking(points, currFace);
+
+
+    }
+
+}
