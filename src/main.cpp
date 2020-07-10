@@ -130,8 +130,9 @@ int main(int argc, char const *argv[])
   Point p8Tree3 = Point( 1.058491, 1.178786, -0.186251);
   Point p9Tree3 = Point( 0.898345, 1.178786, -0.689030);
   Point p10Tree3 = Point( 1.229808, 1.658069, -0.517713);
+  Point p11Tree3 = Point( 1.063329, 1.358069, -0.393084);
 
-  std::vector<Point *> pointsCloudTree3 = { &p1Tree3, &p2Tree3, &p3Tree3, &p4Tree3, &p5Tree3, &p6Tree3, &p7Tree3, &p8Tree3, &p9Tree3, &p10Tree3 };
+  std::vector<Point *> pointsCloudTree3 = { &p1Tree3, &p2Tree3, &p3Tree3, &p4Tree3, &p5Tree3, &p6Tree3, &p7Tree3, &p8Tree3, &p9Tree3, &p10Tree3, &p11Tree3 };
 
   Point p1Tree4 = Point( 1.317984, 1.618069, -0.688315);
   Point p2Tree4 = Point( 1.400410, 1.628069, -0.429537);
@@ -157,9 +158,9 @@ int main(int argc, char const *argv[])
 
   try
   {
-    std::vector<Face> hullGrass = op::giftWrap3D(pointsCloudGrass);
-    // std::vector<Face> hullGround1 = op::giftWrap3D(pointsCloudGround1);
-    std::vector<Face> hullGround1 = op::frontierAdvance3D(pointsCloudGround1);
+    std::vector<Face> hullGrass = op::frontierAdvance3D(pointsCloudGrass);
+    std::vector<Face> hullGround1 = op::giftWrap3D(pointsCloudGround1);
+    // std::vector<Face> hullGround1 = op::frontierAdvance3D(pointsCloudGround1);
     
     std::vector<Face> hullGround2 = op::giftWrap3D(pointsCloudGround2);
 
@@ -169,7 +170,7 @@ int main(int argc, char const *argv[])
     std::vector<Face> hullTree4 = op::giftWrap3D(pointsCloudTree4);
 
     std::ofstream convexHullExport;
-    convexHullExport.open ("convex-hull.hull");
+    convexHullExport.open ("convex-hull.obj");
 
     std::vector<Point *> pointsCloud = {};
     pointsCloud.insert(pointsCloud.end(), pointsCloudGrass.begin(), pointsCloudGrass.end());
@@ -182,7 +183,7 @@ int main(int argc, char const *argv[])
 
     for(auto* point : pointsCloud)
     {
-      convexHullExport << "p " << point->x << " " << point->y << " " << point->z << "\n";
+      convexHullExport << "v " << point->x << " " << point->y << " " << point->z << "\n";
     }
 
     convexHullExport << "hull color #CFE781" << "\n";

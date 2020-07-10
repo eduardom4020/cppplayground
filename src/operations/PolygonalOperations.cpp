@@ -287,47 +287,47 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
     return hull;
 }
 
-bool intersect(Line line, Face face)
+bool op::intersect(Line line, Face face)
 {
-    Vector v1 = op::sub(face[1], face[0]);
-    Vector v2 = op::sub(face[2], face[0]);
+    Vector v1 = op::sub(*face[1], *face[0]);
+    Vector v2 = op::sub(*face[2], *face[0]);
 
     Vector origin = Vector(*line.start);
     Vector direction = Vector(*line.end);
 
     Vector pvec = op::cross(direction, v2);
     double det = op::dot(v1, pvec);
-
+    
     if(det > - 0.00001 && det < 0.00001) return false;
 
     double inverseDet = 1 / det;
 
-    Vector tvec = op::sub(origin, face[0]);
+    Vector tvec = op::sub(origin, *face[0]);
     double u = op::dot(tvec, pvec) * inverseDet;
     if (u < 0 || u > 1) return false; 
 
     Vector qvec = op::cross(tvec, v1);
     double v = op::dot(direction, qvec) * inverseDet;
+    
     if (v < 0 || u + v > 1) return false;
 
-    t = op::dot(v2, qvec) * invDet;
+    double t = op::dot(v2, qvec) * inverseDet;
 
     if(line.length <= t) return false;
-
     return true;
 }
 
-bool intersect(Face f1, Face f2)
+bool op::intersect(Face f1, Face f2)
 {
     int f1Intersections = 0;
-    f1Intersections += int( op::intersect( Line(f1[0], f1[1]), f2 ) );
-    f1Intersections += int( op::intersect( Line(f1[1], f1[2]), f2 ) );
-    f1Intersections += int( op::intersect( Line(f1[2], f1[0]), f2 ) );
+    f1Intersections += int( op::intersect( Line(*f1[0], *f1[1]), f2 ) );
+    f1Intersections += int( op::intersect( Line(*f1[1], *f1[2]), f2 ) );
+    f1Intersections += int( op::intersect( Line(*f1[2], *f1[0]), f2 ) );
 
     int f2Intersections = 0;
-    f2Intersections += int( op::intersect( Line(f2[0], f2[1]), f1 ) );
-    f2Intersections += int( op::intersect( Line(f2[1], f2[2]), f1 ) );
-    f2Intersections += int( op::intersect( Line(f2[2], f2[0]), f1 ) );
+    f2Intersections += int( op::intersect( Line(*f2[0], *f2[1]), f1 ) );
+    f2Intersections += int( op::intersect( Line(*f2[1], *f2[2]), f1 ) );
+    f2Intersections += int( op::intersect( Line(*f2[2], *f2[0]), f1 ) );
 
     return f1Intersections == 2 || f2Intersections == 2 || ( f1Intersections == 1 && f2Intersections == 1);
 }
@@ -348,15 +348,15 @@ bool op::isVertexOfFace(Point* point, Face face)
 struct RankElement {
     int value;
     int index;
-}
+};
 
 bool rankingOrderCondition(RankElement a, RankElement b) { return (a.value < b.value); }
 
 bool pointIsValid(Face face, Point point, std::vector<Face> solid)
 {
-    Face f1 = Face(face[0], face[1], point);
-    Face f2 = Face(face[1], face[2], point);
-    Face f3 = Face(face[2], face[0], point);
+    Face f1 = Face(*face[0], *face[1], point);
+    Face f2 = Face(*face[1], *face[2], point);
+    Face f3 = Face(*face[2], *face[0], point);
 
     for(auto& currFace : solid)
     {
@@ -383,14 +383,16 @@ std::vector<RankElement> pointsRanking(std::vector<Point *> points, Face face)
         if(!op::isVertexOfFace(points[i], face))
         {
             RankElement toRank;
-            toRank.value = op::dist(points[i], face);
+            toRank.value = op::dist(*points[i], face);
             toRank.index = i;
 
             ranking.push_back(toRank);
         }
     }
 
-    return std::sort(ranking.begin(), ranking.end(), rankingOrderCondition);
+    std::sort(ranking.begin(), ranking.end(), rankingOrderCondition);
+
+    return ranking;
 }
 
 std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
@@ -409,9 +411,6 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
         facesQueue.push_back(face);
     }
 
-    std::vector<Point *> internalPoints = {};
-    internalPoints.reserve(points.size());
-
     while(facesQueue.size() > 0)
     {
         Face currFace = facesQueue.back();
@@ -429,11 +428,12 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
 
             if( pointIsValid(currFace, *currPoint, solid) )
             {
+                // std::cout << "point is valid" << std::endl;
                 choosenPointIndex = rank.index;
             }
         }
 
-        if(ranking.size() == 0)
+        if(choosenPointIndex == -1)
         {
             throw "Unable to create solid. It's not tessellable.";
         }
@@ -441,17 +441,34 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
         {
             Point* currPoint = points[choosenPointIndex];
 
-            Face f1 = Face(currFace[0], currFace[1], *currPoint);
-            Face f2 = Face(currFace[1], currFace[2], *currPoint);
-            Face f3 = Face(currFace[2], currFace[0], *currPoint);
+            // std::cout << "Point choosen " << currPoint->toString() << std::endl;
 
-            if(isFaceNew(solid, f1)) solid.push_back(f1);
-            if(isFaceNew(solid, f2)) solid.push_back(f2);
-            if(isFaceNew(solid, f3)) solid.push_back(f3);
+            Face f1 = Face(*currFace[0], *currFace[1], *currPoint);
+            Face f2 = Face(*currFace[1], *currFace[2], *currPoint);
+            Face f3 = Face(*currFace[2], *currFace[0], *currPoint);
 
-            if(isFaceNew(facesQueue, f1)) facesQueue.push_back(f1);
-            if(isFaceNew(facesQueue, f2)) facesQueue.push_back(f2);
-            if(isFaceNew(facesQueue, f3)) facesQueue.push_back(f3);
+            if(isFaceNew(solid, f1))
+            {
+                std::cout << "New f1 " << f1.toString() << std::endl;
+                solid.push_back(f1);
+                facesQueue.push_back(f1);
+            }
+
+            if(isFaceNew(solid, f2))
+            {
+                std::cout << "New f2 " << f2.toString() << std::endl;
+                solid.push_back(f2);
+                facesQueue.push_back(f2);
+            }
+
+            if(isFaceNew(solid, f3))
+            {
+                std::cout << "New f3 " << f3.toString() << std::endl;
+                solid.push_back(f3);
+                facesQueue.push_back(f3);
+            }
+
+            // points.erase(points.begin() + choosenPointIndex);
         }
 
     }
