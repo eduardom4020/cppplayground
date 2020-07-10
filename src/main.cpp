@@ -158,7 +158,9 @@ int main(int argc, char const *argv[])
   try
   {
     std::vector<Face> hullGrass = op::giftWrap3D(pointsCloudGrass);
-    std::vector<Face> hullGround1 = op::giftWrap3D(pointsCloudGround1);
+    // std::vector<Face> hullGround1 = op::giftWrap3D(pointsCloudGround1);
+    std::vector<Face> hullGround1 = op::frontierAdvance3D(pointsCloudGround1);
+    
     std::vector<Face> hullGround2 = op::giftWrap3D(pointsCloudGround2);
 
     std::vector<Face> hullTree1 = op::giftWrap3D(pointsCloudTree1);
