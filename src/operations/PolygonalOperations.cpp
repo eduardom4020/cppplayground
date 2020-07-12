@@ -496,10 +496,8 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
         facesQueue.push_back(face);
     }
 
-    int limitter = 0;
-    while(facesQueue.size() > 0 && limitter < 5)
+    while(facesQueue.size() > 0)
     {
-        limitter++;
         Face currFace = facesQueue.back();
         facesQueue.pop_back();
 
@@ -515,28 +513,19 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
 
             if( pointIsValid(currFace, *currPoint, solid) )
             {
-                std::cout << "point is valid index " << rank.index << std::endl;
                 choosenPointIndex = rank.index;
-            }
-            else 
-            {
-                std::cout << "point is invalid index " << rank.index << std::endl;
             }
 
             it++;
         }
 
-        std::cout << "choosenPointIndex " << choosenPointIndex << std::endl;
-
         if(choosenPointIndex == -1)
         {
-            throw "Unable to create solid. It's not tessellable.";
+            // throw "Unable to create solid. It's not tessellable.";
         }
         else
         {
             Point* currPoint = points[choosenPointIndex];
-
-            std::cout << "Point choosen " << currPoint->toString() << " index " << choosenPointIndex << std::endl;
 
             Face f1 = Face(*currFace[0], *currFace[1], *currPoint);
             Face f2 = Face(*currFace[1], *currFace[2], *currPoint);
@@ -544,34 +533,31 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
 
             if(isFaceNew(solid, f1))
             {
-                // std::cout << "New f1 " << f1.toString() << std::endl;
                 solid.push_back(f1);
                 if(isFaceNew(facesQueue, f1)) facesQueue.push_back(f1);
             }
 
             if(isFaceNew(solid, f2))
             {
-                // std::cout << "New f2 " << f2.toString() << std::endl;
                 solid.push_back(f2);
                 if(isFaceNew(facesQueue, f2)) facesQueue.push_back(f2);
             }
 
             if(isFaceNew(solid, f3))
             {
-                // std::cout << "New f3 " << f3.toString() << std::endl;
                 solid.push_back(f3);
                 if(isFaceNew(facesQueue, f3)) facesQueue.push_back(f3);
             }
 
-            points.erase(points.begin() + choosenPointIndex);
+            // points.erase(points.begin() + choosenPointIndex);
 
-            int fP1Index = findPointIndex(points, currFace[0]);
-            int fP2Index = findPointIndex(points, currFace[1]);
-            int fP3Index = findPointIndex(points, currFace[2]);
+            // int fP1Index = findPointIndex(points, currFace[0]);
+            // int fP2Index = findPointIndex(points, currFace[1]);
+            // int fP3Index = findPointIndex(points, currFace[2]);
 
-            if(fP1Index >= 0) points.erase(points.begin() + fP1Index);
-            if(fP2Index >= 0) points.erase(points.begin() + fP2Index);
-            if(fP3Index >= 0) points.erase(points.begin() + fP3Index);
+            // if(fP1Index >= 0) points.erase(points.begin() + fP1Index);
+            // if(fP2Index >= 0) points.erase(points.begin() + fP2Index);
+            // if(fP3Index >= 0) points.erase(points.begin() + fP3Index);
         }
 
     }
