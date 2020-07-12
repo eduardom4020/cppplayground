@@ -13,9 +13,9 @@ int main(int argc, char const *argv[])
   Point p2 = Point(0, 0, 5);
   Point p3 = Point(5, 0, 0);
 
-  Point p4 = Point(-5, 5, 2);
-  Point p5 = Point(5, 5, 2);
-  Point p6 = Point(0, -5, 2);
+  Point p4 = Point(-10, 5, 2);
+  Point p5 = Point(15, 5, 2);
+  Point p6 = Point(5, -5, 2);
 
   Face f1 = Face(p1,p2,p3);
   Face f2 = Face(p4,p5,p6);
