@@ -289,45 +289,117 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
 
 bool op::intersect(Line line, Face face)
 {
-    Vector v1 = op::sub(*face[1], *face[0]);
-    Vector v2 = op::sub(*face[2], *face[0]);
+    // Vector v1 = op::sub(*face[1], *face[0]);
+    // Vector v2 = op::sub(*face[2], *face[0]);
 
-    Vector origin = Vector(*line.start);
-    Vector direction = Vector(*line.end);
+    // Vector origin = Vector(*line.start);
+    // Vector direction = Vector(*line.end);
 
-    Vector pvec = op::cross(direction, v2);
-    double det = op::dot(v1, pvec);
-    
-    if(det > - 0.00001 && det < 0.00001) return false;
+    // Vector pvec = op::cross(direction, v2);
+    // double det = op::dot(v1, pvec);
+    // // std::cout << "det " << det << std::endl;
+    // if(det > - 0.00001 && det < 0.00001) return false;
 
-    double inverseDet = 1 / det;
+    // double inverseDet = 1 / det;
 
-    Vector tvec = op::sub(origin, *face[0]);
-    double u = op::dot(tvec, pvec) * inverseDet;
-    if (u < 0 || u > 1) return false; 
+    // Vector tvec = op::sub(origin, *face[0]);
+    // double u = op::dot(tvec, pvec) * inverseDet;
+    // // std::cout << "u " << u << std::endl;
+    // // if (std::abs(u) > 1) return false; 
 
-    Vector qvec = op::cross(tvec, v1);
-    double v = op::dot(direction, qvec) * inverseDet;
-    
-    if (v < 0 || u + v > 1) return false;
+    // Vector qvec = op::cross(tvec, v1);
+    // double v = op::dot(direction, qvec) * inverseDet;
+    // // std::cout << "v " << v << std::endl;
+    // // if (std::abs(v) > 1) return false;
 
-    double t = op::dot(v2, qvec) * inverseDet;
+    // double t = op::dot(v2, qvec) * inverseDet;
+    // std::cout << " t " << t << std::endl;
+    // if(t >= 1) return false;
+    // return true;
 
-    if(line.length <= t) return false;
-    return true;
+    Vector s1 = Vector(*face[0], *face[1]);
+    Vector s2 = Vector(*face[0], *face[2]);
+
+    Vector crossRes = op::cross(s1, s2);
+    Normal normal = Normal(crossRes);
+
+    Vector e1 = op::sub(*face[1], *face[0]);
+    Vector e2 = op::sub(*face[2], *face[1]);
+    Vector e3 = op::sub(*face[0], *face[2]);
+
+    Vector crossN1 = op::cross(e1, normal);
+    Vector crossN2 = op::cross(e2, normal);
+    Vector crossN3 = op::cross(e3, normal);
+
+    Normal n1 = Normal(crossN1);
+    Normal n2 = Normal(crossN2);
+    Normal n3 = Normal(crossN3);
+
+    double triangleOriginDistance = op::dot(normal, *face[0]) * -1;
+
+    double t = (triangleOriginDistance + op::dot(normal, *line.start)) / op::dot(normal, op::sub(*line.end, *line.start)) * -1;
+
+    if(t < 0 || t >= 1) return false;
+
+    Vector intersection = op::sum( Vector(*line.start), op::mult(t, op::sub(*line.end, *line.start)) );
+
+    // Point intersection = Point(intersectionVec.x, intersectionVec.y, intersectionVec.z);
+    // std::cout << "intersection " << intersection.toString() << " t " << t << std::endl;
+    // return op::isInside(intersection, face);
+
+    double dist1 = op::dot( op::sub(intersection, *face[0]), n1 ) / op::len(n1);
+    double dist2 = op::dot( op::sub(intersection, *face[1]), n2 ) / op::len(n2);
+    double dist3 = op::dot( op::sub(intersection, *face[2]), n3 ) / op::len(n3);
+
+    return dist1 < 0 && dist2 < 0 && dist3 < 0;
+
+    // Vector startToPlane = op::sub(*line.start, *face[0]);
+    // Vector endToPlane = op::sub(*line.end, *face[0]);
+    // double startDistToPlane = op::dot(startToPlane, normal);
+    // double endDistToPlane = op::dot(endToPlane, normal);
+
+    // if ( (startDistToPlane * endDistToPlane) >= 0 || startDistToPlane == endDistToPlane ) return false;
+
+    // Vector intersectionVector = op::sum( Vector(*line.start), op::sub(*line.end, *line.start) );
+    // intersectionVector = op::mult( (startDistToPlane / (endDistToPlane - startDistToPlane) * -1), intersectionVector );
+
+    // Point intersectionPoint = Point(intersectionVector.x, intersectionVector.y, intersectionVector.z);
+
+    // Vector e1 = op::sub(*face[1], *face[0]);
+    // Vector intersectionTestE1 = op::cross(normal, e1);
+    // if(op::dot(intersectionTestE1, op::sub(intersectionPoint, *face[0])) < 0) return false;
+
+    // Vector e2 = op::sub(*face[2], *face[1]);
+    // Vector intersectionTestE2 = op::cross(normal, e2);
+    // if(op::dot(intersectionTestE2, op::sub(intersectionPoint, *face[1])) < 0) return false;
+
+    // Vector e3 = op::sub(*face[0], *face[2]);
+    // Vector intersectionTestE3 = op::cross(normal, e3);
+    // if(op::dot(intersectionTestE3, op::sub(intersectionPoint, *face[2])) < 0) return false;
+
+    // return true;
 }
 
 bool op::intersect(Face f1, Face f2)
 {
     int f1Intersections = 0;
-    f1Intersections += int( op::intersect( Line(*f1[0], *f1[1]), f2 ) );
-    f1Intersections += int( op::intersect( Line(*f1[1], *f1[2]), f2 ) );
-    f1Intersections += int( op::intersect( Line(*f1[2], *f1[0]), f2 ) );
+    // std::cout << "f1Intersections " << f1Intersections << std::endl;
+    f1Intersections += int( op::intersect( Line(*f1[0], *f1[2]), f2 ) );
+    // std::cout << "f1Intersections " << f1Intersections << std::endl;
+    f1Intersections += int( op::intersect( Line(*f1[2], *f1[1]), f2 ) );
+    // std::cout << "f1Intersections " << f1Intersections << std::endl;
+    f1Intersections += int( op::intersect( Line(*f1[1], *f1[0]), f2 ) );
+    // std::cout << "f1Intersections " << f1Intersections << std::endl;
 
     int f2Intersections = 0;
-    f2Intersections += int( op::intersect( Line(*f2[0], *f2[1]), f1 ) );
-    f2Intersections += int( op::intersect( Line(*f2[1], *f2[2]), f1 ) );
-    f2Intersections += int( op::intersect( Line(*f2[2], *f2[0]), f1 ) );
+    f2Intersections += int( op::intersect( Line(*f2[0], *f2[2]), f1 ) );
+    // std::cout << "f2Intersections " << f2Intersections << std::endl;
+    f2Intersections += int( op::intersect( Line(*f2[2], *f2[1]), f1 ) );
+    // std::cout << "f2Intersections " << f2Intersections << std::endl;
+    f2Intersections += int( op::intersect( Line(*f2[1], *f2[0]), f1 ) );
+    // std::cout << "f2Intersections " << f2Intersections << std::endl;
+
+    // std::cout << "f1Intersections " << f1Intersections << " f2Intersections " << f2Intersections << std::endl;
 
     return f1Intersections == 2 || f2Intersections == 2 || ( f1Intersections == 1 && f2Intersections == 1);
 }
@@ -395,6 +467,19 @@ std::vector<RankElement> pointsRanking(std::vector<Point *> points, Face face)
     return ranking;
 }
 
+int findPointIndex(std::vector<Point*>& points, Point* point)
+{
+    for(int i=0; i < points.size(); i++)
+    {
+        if(points[i] == point)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
 {
     std::vector<Face> hull = op::giftWrap3D(points);
@@ -411,27 +496,37 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
         facesQueue.push_back(face);
     }
 
-    while(facesQueue.size() > 0)
+    int limitter = 0;
+    while(facesQueue.size() > 0 && limitter < 5)
     {
+        limitter++;
         Face currFace = facesQueue.back();
         facesQueue.pop_back();
 
         std::vector<RankElement> ranking = pointsRanking(points, currFace);
+        
+        int it = 0;
+        int choosenPointIndex = -1;
 
-        bool choosenPointIndex = -1;
-
-        while(choosenPointIndex == -1 || ranking.size() != 0)
+        while(choosenPointIndex == -1 && it < ranking.size())
         {
-            RankElement rank = ranking.back();
+            RankElement rank = ranking[it];
             Point* currPoint = points[rank.index];
-            ranking.pop_back();
 
             if( pointIsValid(currFace, *currPoint, solid) )
             {
-                // std::cout << "point is valid" << std::endl;
+                std::cout << "point is valid index " << rank.index << std::endl;
                 choosenPointIndex = rank.index;
             }
+            else 
+            {
+                std::cout << "point is invalid index " << rank.index << std::endl;
+            }
+
+            it++;
         }
+
+        std::cout << "choosenPointIndex " << choosenPointIndex << std::endl;
 
         if(choosenPointIndex == -1)
         {
@@ -441,7 +536,7 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
         {
             Point* currPoint = points[choosenPointIndex];
 
-            // std::cout << "Point choosen " << currPoint->toString() << std::endl;
+            std::cout << "Point choosen " << currPoint->toString() << " index " << choosenPointIndex << std::endl;
 
             Face f1 = Face(*currFace[0], *currFace[1], *currPoint);
             Face f2 = Face(*currFace[1], *currFace[2], *currPoint);
@@ -449,26 +544,34 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
 
             if(isFaceNew(solid, f1))
             {
-                std::cout << "New f1 " << f1.toString() << std::endl;
+                // std::cout << "New f1 " << f1.toString() << std::endl;
                 solid.push_back(f1);
-                facesQueue.push_back(f1);
+                if(isFaceNew(facesQueue, f1)) facesQueue.push_back(f1);
             }
 
             if(isFaceNew(solid, f2))
             {
-                std::cout << "New f2 " << f2.toString() << std::endl;
+                // std::cout << "New f2 " << f2.toString() << std::endl;
                 solid.push_back(f2);
-                facesQueue.push_back(f2);
+                if(isFaceNew(facesQueue, f2)) facesQueue.push_back(f2);
             }
 
             if(isFaceNew(solid, f3))
             {
-                std::cout << "New f3 " << f3.toString() << std::endl;
+                // std::cout << "New f3 " << f3.toString() << std::endl;
                 solid.push_back(f3);
-                facesQueue.push_back(f3);
+                if(isFaceNew(facesQueue, f3)) facesQueue.push_back(f3);
             }
 
-            // points.erase(points.begin() + choosenPointIndex);
+            points.erase(points.begin() + choosenPointIndex);
+
+            int fP1Index = findPointIndex(points, currFace[0]);
+            int fP2Index = findPointIndex(points, currFace[1]);
+            int fP3Index = findPointIndex(points, currFace[2]);
+
+            if(fP1Index >= 0) points.erase(points.begin() + fP1Index);
+            if(fP2Index >= 0) points.erase(points.begin() + fP2Index);
+            if(fP3Index >= 0) points.erase(points.begin() + fP3Index);
         }
 
     }
