@@ -289,34 +289,6 @@ std::vector<Face> op::giftWrap3D(std::vector<Point *> points)
 
 bool op::intersect(Line line, Face face)
 {
-    // Vector v1 = op::sub(*face[1], *face[0]);
-    // Vector v2 = op::sub(*face[2], *face[0]);
-
-    // Vector origin = Vector(*line.start);
-    // Vector direction = Vector(*line.end);
-
-    // Vector pvec = op::cross(direction, v2);
-    // double det = op::dot(v1, pvec);
-    // // std::cout << "det " << det << std::endl;
-    // if(det > - 0.00001 && det < 0.00001) return false;
-
-    // double inverseDet = 1 / det;
-
-    // Vector tvec = op::sub(origin, *face[0]);
-    // double u = op::dot(tvec, pvec) * inverseDet;
-    // // std::cout << "u " << u << std::endl;
-    // // if (std::abs(u) > 1) return false; 
-
-    // Vector qvec = op::cross(tvec, v1);
-    // double v = op::dot(direction, qvec) * inverseDet;
-    // // std::cout << "v " << v << std::endl;
-    // // if (std::abs(v) > 1) return false;
-
-    // double t = op::dot(v2, qvec) * inverseDet;
-    // std::cout << " t " << t << std::endl;
-    // if(t >= 1) return false;
-    // return true;
-
     Vector s1 = Vector(*face[0], *face[1]);
     Vector s2 = Vector(*face[0], *face[2]);
 
@@ -336,48 +308,32 @@ bool op::intersect(Line line, Face face)
     Normal n3 = Normal(crossN3);
 
     double triangleOriginDistance = op::dot(normal, *face[0]) * -1;
+    double anglePlaneLineStart = triangleOriginDistance + op::dot(normal, Vector(*line.start));
+    double anglePlaneLine = op::dot(normal, op::sub(*line.end, *line.start));
 
-    double t = (triangleOriginDistance + op::dot(normal, *line.start)) / op::dot(normal, op::sub(*line.end, *line.start)) * -1;
+    double t = anglePlaneLineStart / anglePlaneLine * -1;
+    
+    if(anglePlaneLine > -0.000001 && anglePlaneLine < 0.000001)
+    {
+        Line l1 = Line(*face[0], *face[1]);
+        Line l2 = Line(*face[1], *face[2]);
+        Line l3 = Line(*face[2], *face[0]);
+        std::cout << l1.start->toString() << " " << l1.end->toString() << std::endl;
+        std::cout << l2.start->toString() << " " << l2.end->toString() << std::endl;
+        std::cout << l3.start->toString() << " " << l3.end->toString() << std::endl;
+        std::cout << line.start->toString() << " " << line.end->toString() << std::endl << std::endl;
+        return op::intersect(line, l1) || op::intersect(line, l2) || op::intersect(line, l3);
+    }
 
     if(t < 0 || t >= 1) return false;
 
     Vector intersection = op::sum( Vector(*line.start), op::mult(t, op::sub(*line.end, *line.start)) );
-
-    // Point intersection = Point(intersectionVec.x, intersectionVec.y, intersectionVec.z);
-    // std::cout << "intersection " << intersection.toString() << " t " << t << std::endl;
-    // return op::isInside(intersection, face);
 
     double dist1 = op::dot( op::sub(intersection, *face[0]), n1 ) / op::len(n1);
     double dist2 = op::dot( op::sub(intersection, *face[1]), n2 ) / op::len(n2);
     double dist3 = op::dot( op::sub(intersection, *face[2]), n3 ) / op::len(n3);
 
     return dist1 < 0 && dist2 < 0 && dist3 < 0;
-
-    // Vector startToPlane = op::sub(*line.start, *face[0]);
-    // Vector endToPlane = op::sub(*line.end, *face[0]);
-    // double startDistToPlane = op::dot(startToPlane, normal);
-    // double endDistToPlane = op::dot(endToPlane, normal);
-
-    // if ( (startDistToPlane * endDistToPlane) >= 0 || startDistToPlane == endDistToPlane ) return false;
-
-    // Vector intersectionVector = op::sum( Vector(*line.start), op::sub(*line.end, *line.start) );
-    // intersectionVector = op::mult( (startDistToPlane / (endDistToPlane - startDistToPlane) * -1), intersectionVector );
-
-    // Point intersectionPoint = Point(intersectionVector.x, intersectionVector.y, intersectionVector.z);
-
-    // Vector e1 = op::sub(*face[1], *face[0]);
-    // Vector intersectionTestE1 = op::cross(normal, e1);
-    // if(op::dot(intersectionTestE1, op::sub(intersectionPoint, *face[0])) < 0) return false;
-
-    // Vector e2 = op::sub(*face[2], *face[1]);
-    // Vector intersectionTestE2 = op::cross(normal, e2);
-    // if(op::dot(intersectionTestE2, op::sub(intersectionPoint, *face[1])) < 0) return false;
-
-    // Vector e3 = op::sub(*face[0], *face[2]);
-    // Vector intersectionTestE3 = op::cross(normal, e3);
-    // if(op::dot(intersectionTestE3, op::sub(intersectionPoint, *face[2])) < 0) return false;
-
-    // return true;
 }
 
 bool op::intersect(Face f1, Face f2)

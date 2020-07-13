@@ -73,7 +73,7 @@ Vector op::cross(const Vector& v1, const Vector& v2)
 
 double op::crossR2(const Vector& v1, const Vector& v2)
 {
-    return v1.x * v2.y - v1.y * v2.x;
+    return v1.x / v1.z * v2.y / v2.z - v1.y /v1.z * v2.x / v2.z;
 }
 
 bool op::leftOf(const Vector& v1, const Vector& v2)
