@@ -19,7 +19,7 @@
 
 namespace op
 {
-    bool intersect(Line& l1, Line& l2);
+    bool intersect(Line& l1, Line& l2, std::string plane);
     bool intersect(Line line, Face face);
     bool intersect(Face f1, Face f2);
     std::vector<double> baricentricCoordnates(Point& point, Triangle& triangle);

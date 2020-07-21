@@ -40,3 +40,8 @@ std::string Point::toString()
     out.append(" )");
     return out;
 }
+
+bool Point::operator==(Point& point)
+{
+    return x == point.x && y == point.y && z == point.z;
+}

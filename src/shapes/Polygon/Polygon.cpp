@@ -15,9 +15,9 @@ double Polygon::area()
     std::vector<Point *>::size_type i;
 
     for (i=0; i < points.size() - 1; i++)
-        double_area += op::crossR2(*points[i], *points[i + 1]);
+        double_area += op::crossR2(*points[i], *points[i + 1], "z");
     
-    double_area += op::crossR2(*points[i], *points[0]);
+    double_area += op::crossR2(*points[i], *points[0], "z");
 
     return double_area / 2;
 }

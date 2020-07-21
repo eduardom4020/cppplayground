@@ -29,7 +29,7 @@ namespace op
     double len(const Vector& v);
 
     Vector cross(const Vector& v1, const Vector& v2);
-    double crossR2(const Vector& v1, const Vector& v2);
+    double crossR2(const Vector& v1, const Vector& v2, std::string plane);
 
     bool leftOf(const Vector& v1, const Vector& v2);
     Vector left(const Vector& v1, const Vector& v2);

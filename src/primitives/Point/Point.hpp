@@ -15,6 +15,8 @@ class Point
 
         std::string toString();
 
+        bool operator==(Point& point);
+
     private:
         
 };

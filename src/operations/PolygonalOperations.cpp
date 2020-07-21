@@ -1,20 +1,20 @@
 #include "./PolygonalOperations.hpp"
 
-bool op::intersect(Line& l1, Line& l2)
+bool op::intersect(Line& l1, Line& l2, std::string plane)
 {
     Vector l1_base = l1.toVector();
     Vector l1_lower = Vector(*l1.start, *l2.start);
     Vector l1_upper = Vector(*l1.start, *l2.end);
 
-    double l1_base_lower = op::crossR2(l1_base, l1_lower);
-    double l1_base_upper = op::crossR2(l1_base, l1_upper);
+    double l1_base_lower = op::crossR2(l1_base, l1_lower, plane);
+    double l1_base_upper = op::crossR2(l1_base, l1_upper, plane);
 
     Vector l2_base = l2.toVector();
     Vector l2_lower = Vector(*l2.start, *l1.start);
     Vector l2_upper = Vector(*l2.start, *l1.end);
 
-    double l2_base_lower = op::crossR2(l2_base, l2_lower);
-    double l2_base_upper = op::crossR2(l2_base, l2_upper);
+    double l2_base_lower = op::crossR2(l2_base, l2_lower, plane);
+    double l2_base_upper = op::crossR2(l2_base, l2_upper, plane);
 
     bool l1_ok = l1_base_lower * l1_base_upper < 0;
     bool l2_ok = l2_base_lower * l2_base_upper < 0;
@@ -313,16 +313,15 @@ bool op::intersect(Line line, Face face)
 
     double t = anglePlaneLineStart / anglePlaneLine * -1;
     
-    if(anglePlaneLine > -0.000001 && anglePlaneLine < 0.000001)
+    if(anglePlaneLine > -0.01 && anglePlaneLine < 0.01)
     {
         Line l1 = Line(*face[0], *face[1]);
         Line l2 = Line(*face[1], *face[2]);
         Line l3 = Line(*face[2], *face[0]);
-        std::cout << l1.start->toString() << " " << l1.end->toString() << std::endl;
-        std::cout << l2.start->toString() << " " << l2.end->toString() << std::endl;
-        std::cout << l3.start->toString() << " " << l3.end->toString() << std::endl;
-        std::cout << line.start->toString() << " " << line.end->toString() << std::endl << std::endl;
-        return op::intersect(line, l1) || op::intersect(line, l2) || op::intersect(line, l3);
+        
+        return op::intersect(line, l1, "x") || op::intersect(line, l2, "x") || op::intersect(line, l3, "x")
+        || op::intersect(line, l1, "y") || op::intersect(line, l2, "y") || op::intersect(line, l3, "y")
+        || op::intersect(line, l1, "z") || op::intersect(line, l2, "z") || op::intersect(line, l3, "z");
     }
 
     if(t < 0 || t >= 1) return false;
@@ -339,23 +338,14 @@ bool op::intersect(Line line, Face face)
 bool op::intersect(Face f1, Face f2)
 {
     int f1Intersections = 0;
-    // std::cout << "f1Intersections " << f1Intersections << std::endl;
     f1Intersections += int( op::intersect( Line(*f1[0], *f1[2]), f2 ) );
-    // std::cout << "f1Intersections " << f1Intersections << std::endl;
     f1Intersections += int( op::intersect( Line(*f1[2], *f1[1]), f2 ) );
-    // std::cout << "f1Intersections " << f1Intersections << std::endl;
     f1Intersections += int( op::intersect( Line(*f1[1], *f1[0]), f2 ) );
-    // std::cout << "f1Intersections " << f1Intersections << std::endl;
 
     int f2Intersections = 0;
     f2Intersections += int( op::intersect( Line(*f2[0], *f2[2]), f1 ) );
-    // std::cout << "f2Intersections " << f2Intersections << std::endl;
     f2Intersections += int( op::intersect( Line(*f2[2], *f2[1]), f1 ) );
-    // std::cout << "f2Intersections " << f2Intersections << std::endl;
     f2Intersections += int( op::intersect( Line(*f2[1], *f2[0]), f1 ) );
-    // std::cout << "f2Intersections " << f2Intersections << std::endl;
-
-    // std::cout << "f1Intersections " << f1Intersections << " f2Intersections " << f2Intersections << std::endl;
 
     return f1Intersections == 2 || f2Intersections == 2 || ( f1Intersections == 1 && f2Intersections == 1);
 }
@@ -374,7 +364,7 @@ bool op::isVertexOfFace(Point* point, Face face)
 }
 
 struct RankElement {
-    int value;
+    double value;
     int index;
 };
 
@@ -427,7 +417,7 @@ int findPointIndex(std::vector<Point*>& points, Point* point)
 {
     for(int i=0; i < points.size(); i++)
     {
-        if(points[i] == point)
+        if(*points[i] == *point)
         {
             return i;
         }
@@ -451,7 +441,7 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
         solid.push_back(face);
         facesQueue.push_back(face);
     }
-
+    
     while(facesQueue.size() > 0)
     {
         Face currFace = facesQueue.back();
@@ -475,14 +465,10 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
             it++;
         }
 
-        if(choosenPointIndex == -1)
-        {
-            // throw "Unable to create solid. It's not tessellable.";
-        }
-        else
+        if(choosenPointIndex >= 0)
         {
             Point* currPoint = points[choosenPointIndex];
-
+            
             Face f1 = Face(*currFace[0], *currFace[1], *currPoint);
             Face f2 = Face(*currFace[1], *currFace[2], *currPoint);
             Face f3 = Face(*currFace[2], *currFace[0], *currPoint);
@@ -504,16 +490,6 @@ std::vector<Face> op::frontierAdvance3D(std::vector<Point *> points)
                 solid.push_back(f3);
                 if(isFaceNew(facesQueue, f3)) facesQueue.push_back(f3);
             }
-
-            // points.erase(points.begin() + choosenPointIndex);
-
-            // int fP1Index = findPointIndex(points, currFace[0]);
-            // int fP2Index = findPointIndex(points, currFace[1]);
-            // int fP3Index = findPointIndex(points, currFace[2]);
-
-            // if(fP1Index >= 0) points.erase(points.begin() + fP1Index);
-            // if(fP2Index >= 0) points.erase(points.begin() + fP2Index);
-            // if(fP3Index >= 0) points.erase(points.begin() + fP3Index);
         }
 
     }

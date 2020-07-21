@@ -8,27 +8,6 @@
 
 int main(int argc, char const *argv[])
 {
-  std::cout << "Triangle Intersection test" << std::endl;
-  Point p1 = Point(-5, 0, 0);
-  Point p2 = Point(0, 0, 5);
-  Point p3 = Point(5, 0, 0);
-
-  Point p4 = Point(-10, 0, 0);
-  Point p5 = Point(-5, 0, 5);
-  Point p6 = Point(0, 0, 0);
-
-  Face f1 = Face(p1,p2,p3);
-  Face f2 = Face(p4,p5,p6);
-  bool intersect = op::intersect(f1, f2);
-
-  // bool intersectLine = op::intersect(Line(p3, p2), f2);
-
-  std::vector<Point *> pointsCloudGrass = { &p1, &p2, &p3,&p4,&p5,&p6 };
-  std::vector<Face> hullGrass = { f1, f2 };
-
-  std::cout << (intersect ? " Faces Intersect" : "Faces Not intersect") << std::endl;
-  // std::cout << (intersectLine ? " Line Intersect" : "Line Not intersect") << std::endl;
-
   std::cout << "3D Hull Builder" << std::endl;
   
   Point p1Grass = Point(3.618037, -0.811649, 2.667051);
@@ -90,7 +69,7 @@ int main(int argc, char const *argv[])
   Point p57Grass = Point(-2.077904, -0.485191, 0.533761);
   Point p58Grass = Point(0.145863, -0.403315, -1.690258);
 
-  // std::vector<Point *> pointsCloudGrass = { &p1Grass, &p2Grass, &p3Grass, &p4Grass, &p5Grass, &p6Grass, &p7Grass, &p8Grass, &p9Grass, &p10Grass, &p11Grass, &p12Grass, &p13Grass, &p14Grass, &p15Grass, &p16Grass, &p17Grass, &p18Grass, &p19Grass, &p20Grass, &p21Grass, &p22Grass, &p23Grass, &p24Grass, &p25Grass, &p26Grass, &p27Grass, &p28Grass, &p29Grass, &p30Grass, &p31Grass, &p32Grass, &p33Grass, &p34Grass, &p35Grass, &p36Grass, &p37Grass, &p38Grass, &p39Grass, &p40Grass, &p41Grass, &p42Grass, &p43Grass, &p44Grass, &p45Grass, &p46Grass, &p47Grass, &p48Grass, &p49Grass, &p50Grass, &p51Grass, &p52Grass, &p53Grass, &p54Grass, &p55Grass, &p56Grass, &p57Grass, &p58Grass };
+  std::vector<Point *> pointsCloudGrass = { &p1Grass, &p2Grass, &p3Grass, &p4Grass, &p5Grass, &p6Grass, &p7Grass, &p8Grass, &p9Grass, &p10Grass, &p11Grass, &p12Grass, &p13Grass, &p14Grass, &p15Grass, &p16Grass, &p17Grass, &p18Grass, &p19Grass, &p20Grass, &p21Grass, &p22Grass, &p23Grass, &p24Grass, &p25Grass, &p26Grass, &p27Grass, &p28Grass, &p29Grass, &p30Grass, &p31Grass, &p32Grass, &p33Grass, &p34Grass, &p35Grass, &p36Grass, &p37Grass, &p38Grass, &p39Grass, &p40Grass, &p41Grass, &p42Grass, &p43Grass, &p44Grass, &p45Grass, &p46Grass, &p47Grass, &p48Grass, &p49Grass, &p50Grass, &p51Grass, &p52Grass, &p53Grass, &p54Grass, &p55Grass, &p56Grass, &p57Grass, &p58Grass };
 
   Point p1Ground1 = Point( 3.618037, -0.811649, 2.667051);
   Point p2Ground1 = Point( -1.381940, -0.811650, 4.291671);
@@ -191,31 +170,31 @@ int main(int argc, char const *argv[])
 
   try
   {
-    // std::vector<Face> hullGrass = op::frontierAdvance3D(pointsCloudGrass);
-    // std::vector<Face> hullGround1 = op::frontierAdvance3D(pointsCloudGround1);
+    std::vector<Face> hullGrass = op::frontierAdvance3D(pointsCloudGrass);
+    std::vector<Face> hullGround1 = op::frontierAdvance3D(pointsCloudGround1);
     
-    // std::vector<Face> hullGround2 = op::frontierAdvance3D(pointsCloudGround2);
+    std::vector<Face> hullGround2 = op::frontierAdvance3D(pointsCloudGround2);
 
-    // std::vector<Face> hullTree1 = op::frontierAdvance3D(pointsCloudTree1);
-    // std::vector<Face> hullTree2 = op::frontierAdvance3D(pointsCloudTree2);
-    // std::vector<Face> hullTree3 = op::frontierAdvance3D(pointsCloudTree3);
-    // std::vector<Face> hullTree4 = op::frontierAdvance3D(pointsCloudTree4);
+    std::vector<Face> hullTree1 = op::frontierAdvance3D(pointsCloudTree1);
+    std::vector<Face> hullTree2 = op::frontierAdvance3D(pointsCloudTree2);
+    std::vector<Face> hullTree3 = op::frontierAdvance3D(pointsCloudTree3);
+    std::vector<Face> hullTree4 = op::frontierAdvance3D(pointsCloudTree4);
 
     std::ofstream convexHullExport;
-    convexHullExport.open ("convex-hull.obj");
+    convexHullExport.open ("convex-hull.hull");
 
     std::vector<Point *> pointsCloud = {};
     pointsCloud.insert(pointsCloud.end(), pointsCloudGrass.begin(), pointsCloudGrass.end());
-    // pointsCloud.insert(pointsCloud.end(), pointsCloudGround1.begin(), pointsCloudGround1.end());
-    // pointsCloud.insert(pointsCloud.end(), pointsCloudGround2.begin(), pointsCloudGround2.end());
-    // pointsCloud.insert(pointsCloud.end(), pointsCloudTree1.begin(), pointsCloudTree1.end());
-    // pointsCloud.insert(pointsCloud.end(), pointsCloudTree2.begin(), pointsCloudTree2.end());
-    // pointsCloud.insert(pointsCloud.end(), pointsCloudTree3.begin(), pointsCloudTree3.end());
-    // pointsCloud.insert(pointsCloud.end(), pointsCloudTree4.begin(), pointsCloudTree4.end());
+    pointsCloud.insert(pointsCloud.end(), pointsCloudGround1.begin(), pointsCloudGround1.end());
+    pointsCloud.insert(pointsCloud.end(), pointsCloudGround2.begin(), pointsCloudGround2.end());
+    pointsCloud.insert(pointsCloud.end(), pointsCloudTree1.begin(), pointsCloudTree1.end());
+    pointsCloud.insert(pointsCloud.end(), pointsCloudTree2.begin(), pointsCloudTree2.end());
+    pointsCloud.insert(pointsCloud.end(), pointsCloudTree3.begin(), pointsCloudTree3.end());
+    pointsCloud.insert(pointsCloud.end(), pointsCloudTree4.begin(), pointsCloudTree4.end());
 
     for(auto* point : pointsCloud)
     {
-      convexHullExport << "v " << point->x << " " << point->y << " " << point->z << "\n";
+      convexHullExport << "p " << point->x << " " << point->y << " " << point->z << "\n";
     }
 
     convexHullExport << "hull color #CFE781" << "\n";
@@ -249,191 +228,191 @@ int main(int argc, char const *argv[])
       }
     }
 
-    // convexHullExport << "hull color #E7CA94" << "\n";
-    // for(auto& face : hullGround1)
-    // {
-    //   int p1Index = -1;
-    //   int p2Index = -1;
-    //   int p3Index = -1;
+    convexHullExport << "hull color #E7CA94" << "\n";
+    for(auto& face : hullGround1)
+    {
+      int p1Index = -1;
+      int p2Index = -1;
+      int p3Index = -1;
 
-    //   for(int i=0; i < pointsCloud.size(); i++)
-    //   {
-    //     if(pointsCloud[i] == face.points[0])
-    //     {
-    //       p1Index = i + 1;
-    //     }
+      for(int i=0; i < pointsCloud.size(); i++)
+      {
+        if(pointsCloud[i] == face.points[0])
+        {
+          p1Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[1])
-    //     {
-    //       p2Index = i + 1;
-    //     }
+        if(pointsCloud[i] == face.points[1])
+        {
+          p2Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[2])
-    //     {
-    //       p3Index = i + 1;
-    //     }
-    //   }
+        if(pointsCloud[i] == face.points[2])
+        {
+          p3Index = i + 1;
+        }
+      }
 
-    //   if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
-    //   {
-    //     convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
-    //   }
-    // }
+      if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
+      {
+        convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
+      }
+    }
 
-    // convexHullExport << "hull color #E7CA94" << "\n";
-    // for(auto& face : hullGround2)
-    // {
-    //   int p1Index = -1;
-    //   int p2Index = -1;
-    //   int p3Index = -1;
+    convexHullExport << "hull color #E7CA94" << "\n";
+    for(auto& face : hullGround2)
+    {
+      int p1Index = -1;
+      int p2Index = -1;
+      int p3Index = -1;
 
-    //   for(int i=0; i < pointsCloud.size(); i++)
-    //   {
-    //     if(pointsCloud[i] == face.points[0])
-    //     {
-    //       p1Index = i + 1;
-    //     }
+      for(int i=0; i < pointsCloud.size(); i++)
+      {
+        if(pointsCloud[i] == face.points[0])
+        {
+          p1Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[1])
-    //     {
-    //       p2Index = i + 1;
-    //     }
+        if(pointsCloud[i] == face.points[1])
+        {
+          p2Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[2])
-    //     {
-    //       p3Index = i + 1;
-    //     }
-    //   }
+        if(pointsCloud[i] == face.points[2])
+        {
+          p3Index = i + 1;
+        }
+      }
 
-    //   if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
-    //   {
-    //     convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
-    //   }
-    // }
+      if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
+      {
+        convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
+      }
+    }
 
-    // convexHullExport << "hull color #81D4A1" << "\n";
-    // for(auto& face : hullTree1)
-    // {
-    //   int p1Index = -1;
-    //   int p2Index = -1;
-    //   int p3Index = -1;
+    convexHullExport << "hull color #81D4A1" << "\n";
+    for(auto& face : hullTree1)
+    {
+      int p1Index = -1;
+      int p2Index = -1;
+      int p3Index = -1;
 
-    //   for(int i=0; i < pointsCloud.size(); i++)
-    //   {
-    //     if(pointsCloud[i] == face.points[0])
-    //     {
-    //       p1Index = i + 1;
-    //     }
+      for(int i=0; i < pointsCloud.size(); i++)
+      {
+        if(pointsCloud[i] == face.points[0])
+        {
+          p1Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[1])
-    //     {
-    //       p2Index = i + 1;
-    //     }
+        if(pointsCloud[i] == face.points[1])
+        {
+          p2Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[2])
-    //     {
-    //       p3Index = i + 1;
-    //     }
-    //   }
+        if(pointsCloud[i] == face.points[2])
+        {
+          p3Index = i + 1;
+        }
+      }
 
-    //   if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
-    //   {
-    //     convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
-    //   }
-    // }
+      if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
+      {
+        convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
+      }
+    }
 
-    // convexHullExport << "hull color #81D4A1" << "\n";
-    // for(auto& face : hullTree2)
-    // {
-    //   int p1Index = -1;
-    //   int p2Index = -1;
-    //   int p3Index = -1;
+    convexHullExport << "hull color #81D4A1" << "\n";
+    for(auto& face : hullTree2)
+    {
+      int p1Index = -1;
+      int p2Index = -1;
+      int p3Index = -1;
 
-    //   for(int i=0; i < pointsCloud.size(); i++)
-    //   {
-    //     if(pointsCloud[i] == face.points[0])
-    //     {
-    //       p1Index = i + 1;
-    //     }
+      for(int i=0; i < pointsCloud.size(); i++)
+      {
+        if(pointsCloud[i] == face.points[0])
+        {
+          p1Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[1])
-    //     {
-    //       p2Index = i + 1;
-    //     }
+        if(pointsCloud[i] == face.points[1])
+        {
+          p2Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[2])
-    //     {
-    //       p3Index = i + 1;
-    //     }
-    //   }
+        if(pointsCloud[i] == face.points[2])
+        {
+          p3Index = i + 1;
+        }
+      }
 
-    //   if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
-    //   {
-    //     convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
-    //   }
-    // }
+      if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
+      {
+        convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
+      }
+    }
 
-    // convexHullExport << "hull color #81D4A1" << "\n";
-    // for(auto& face : hullTree3)
-    // {
-    //   int p1Index = -1;
-    //   int p2Index = -1;
-    //   int p3Index = -1;
+    convexHullExport << "hull color #81D4A1" << "\n";
+    for(auto& face : hullTree3)
+    {
+      int p1Index = -1;
+      int p2Index = -1;
+      int p3Index = -1;
 
-    //   for(int i=0; i < pointsCloud.size(); i++)
-    //   {
-    //     if(pointsCloud[i] == face.points[0])
-    //     {
-    //       p1Index = i + 1;
-    //     }
+      for(int i=0; i < pointsCloud.size(); i++)
+      {
+        if(pointsCloud[i] == face.points[0])
+        {
+          p1Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[1])
-    //     {
-    //       p2Index = i + 1;
-    //     }
+        if(pointsCloud[i] == face.points[1])
+        {
+          p2Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[2])
-    //     {
-    //       p3Index = i + 1;
-    //     }
-    //   }
+        if(pointsCloud[i] == face.points[2])
+        {
+          p3Index = i + 1;
+        }
+      }
 
-    //   if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
-    //   {
-    //     convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
-    //   }
-    // }
+      if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
+      {
+        convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
+      }
+    }
 
-    // convexHullExport << "hull color #81D4A1" << "\n";
-    // for(auto& face : hullTree4)
-    // {
-    //   int p1Index = -1;
-    //   int p2Index = -1;
-    //   int p3Index = -1;
+    convexHullExport << "hull color #81D4A1" << "\n";
+    for(auto& face : hullTree4)
+    {
+      int p1Index = -1;
+      int p2Index = -1;
+      int p3Index = -1;
 
-    //   for(int i=0; i < pointsCloud.size(); i++)
-    //   {
-    //     if(pointsCloud[i] == face.points[0])
-    //     {
-    //       p1Index = i + 1;
-    //     }
+      for(int i=0; i < pointsCloud.size(); i++)
+      {
+        if(pointsCloud[i] == face.points[0])
+        {
+          p1Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[1])
-    //     {
-    //       p2Index = i + 1;
-    //     }
+        if(pointsCloud[i] == face.points[1])
+        {
+          p2Index = i + 1;
+        }
 
-    //     if(pointsCloud[i] == face.points[2])
-    //     {
-    //       p3Index = i + 1;
-    //     }
-    //   }
+        if(pointsCloud[i] == face.points[2])
+        {
+          p3Index = i + 1;
+        }
+      }
 
-    //   if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
-    //   {
-    //     convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
-    //   }
-    // }
+      if(p1Index >= 0 && p2Index >= 0 && p3Index >= 0)
+      {
+        convexHullExport << "f " << p1Index << " " << p2Index << " " << p3Index << "\n";
+      }
+    }
 
     convexHullExport.close();
   }

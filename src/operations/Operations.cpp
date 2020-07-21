@@ -71,20 +71,31 @@ Vector op::cross(const Vector& v1, const Vector& v2)
     return Vector(x, y, z);
 }
 
-double op::crossR2(const Vector& v1, const Vector& v2)
+double op::crossR2(const Vector& v1, const Vector& v2, std::string plane)
 {
-    return v1.x / v1.z * v2.y / v2.z - v1.y /v1.z * v2.x / v2.z;
+    if(plane == "x")
+    {
+        return v1.y * v2.z - v1.z * v2.y;
+    }
+    else if(plane == "y")
+    {
+        return v1.x * v2.z - v1.z * v2.x;
+    }
+    else 
+    {
+        return v1.x * v2.y - v1.y * v2.x;
+    }
 }
 
 bool op::leftOf(const Vector& v1, const Vector& v2)
 {
-    double cross_res = op::crossR2(v2, v1);
+    double cross_res = op::crossR2(v2, v1, "z");
     return cross_res >= 0;
 }
 
 Vector op::left(const Vector& v1, const Vector& v2)
 {
-    double cross_res = op::crossR2(v2, v1);
+    double cross_res = op::crossR2(v2, v1, "z");
     return cross_res >= 0 ? v1 : v2;
 }
 
